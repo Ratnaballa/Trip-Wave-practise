@@ -1,0 +1,50 @@
+<section class="hero">
+  <div class="hero-content">
+    <h1>Explore Incredible Destinations</h1>
+    <p>Discover the most beautiful places around the world with TripWave.</p>
+  </div>
+</section>
+
+<section class="popular-section">
+  <h2>Popular Destinations</h2>
+  <div class="filter-buttons">
+  <button (click)="selectedCategory='all'">All</button>
+  <button (click)="selectedCategory='india'">India</button>
+  <button (click)="selectedCategory='international'">International</button>
+</div>
+<!-- Search -->
+<input
+  type="text"
+  placeholder="Search destination..."
+  [(ngModel)]="searchText"
+/>
+
+<!-- Rating Filter -->
+<select [(ngModel)]="selectedRating">
+  <option value="0">All Ratings</option>
+  <option value="3">3★ & above</option>
+  <option value="4">4★ & above</option>
+  <option value="5">5★ only</option>
+</select>
+
+<!-- Budget Filter -->
+<select [(ngModel)]="maxPrice">
+  <option value="100000">All Budgets</option>
+  <option value="20000">Below 20,000</option>
+  <option value="50000">Below 50,000</option>
+  <option value="80000">Below 80,000</option>
+</select>
+
+  <div class="card-grid">
+    <div class="card" *ngFor="let place of filteredDestinations">
+      <img [src]="place.image" alt="{{ place.name }}">
+      <div class="card-content">
+        <h3>{{ place.name }}</h3>
+        <p>{{ place.description }}</p>
+        <p>Rating: {{ place.rating }} ⭐</p>
+    <p>Price: ₹{{ place.price }}</p>
+        <button>Explore</button>
+      </div>
+    </div>
+  </div>
+</section>

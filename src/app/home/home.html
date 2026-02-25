@@ -1,0 +1,76 @@
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">🌊 TripWave</div>
+  <ul class="nav-links">
+    <li>Home</li>
+    <a routerLink="/destinations">Destinations</a>
+    <li>Packages</li>
+    <li>Contact</li>
+  </ul>
+
+  <button class="login-btn">Login</button>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Explore The World With Us</h1>
+    <p>Discover breathtaking destinations and unforgettable experiences.</p>
+    <button class="primary-btn">Explore Now</button>
+  </div>
+</section>
+
+<!-- Popular Destinations -->
+ <section class="destinations">
+    <h2 class="section-title">Popular Destinations</h2>
+    <div class="card-container">
+    <div class="card" *ngFor="let place of destinations">
+    <div class="image-wrapper">
+    <img [src]="place.image" />
+    <div class="overlay">
+    <button>View Details</button>
+    </div>
+    </div>
+
+    <h3>{{ place.name }}</h3>
+    <p>{{ place.description }}</p>
+
+    <div class="stars">
+      <span *ngFor="let star of getStars(place.rating)">⭐</span>
+    </div>
+  </div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="cta">
+  <h2>Ready for Your Next Adventure?</h2>
+  <button class="primary-btn">Book Now</button>
+</section>
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-section">
+      <h3 class="logo">🌊 TripWave</h3>
+      <p>Your trusted travel partner for exploring the world’s most beautiful destinations.</p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li>Home</li>
+        <li>Destinations</li>
+        <li>Packages</li>
+        <li>Contact</li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: support@tripwave.com</p>
+      <p>Phone: +91 9876543210</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 TripWave | All Rights Reserved
+  </div>
+</footer>
