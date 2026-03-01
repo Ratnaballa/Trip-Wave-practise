@@ -1,14 +1,22 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule , RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
 export class Home {
+
+  // Sidebar State
+  isSidebarOpen = false;
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 
   destinations = [
     {
@@ -42,7 +50,8 @@ export class Home {
       rating: 5
     }
   ];
-   getStars(rating: number): number[] {
-  return Array(rating).fill(0);
-}
+
+  getStars(rating: number): number[] {
+    return Array(rating).fill(0);
+  }
 }
