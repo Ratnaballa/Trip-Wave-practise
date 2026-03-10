@@ -4,47 +4,75 @@
     <p>Discover the most beautiful places around the world with TripWave.</p>
   </div>
 </section>
-
 <section class="popular-section">
   <h2>Popular Destinations</h2>
+  <!-- Category Filter -->
   <div class="filter-buttons">
-  <button (click)="selectedCategory='all'">All</button>
-  <button (click)="selectedCategory='india'">India</button>
-  <button (click)="selectedCategory='international'">International</button>
-</div>
-<!-- Search -->
-<input
-  type="text"
-  placeholder="Search destination..."
-  [(ngModel)]="searchText"
-/>
-
-<!-- Rating Filter -->
-<select [(ngModel)]="selectedRating">
-  <option value="0">All Ratings</option>
-  <option value="3">3★ & above</option>
-  <option value="4">4★ & above</option>
-  <option value="5">5★ only</option>
-</select>
-
-<!-- Budget Filter -->
-<select [(ngModel)]="maxPrice">
-  <option value="100000">All Budgets</option>
-  <option value="20000">Below 20,000</option>
-  <option value="50000">Below 50,000</option>
-  <option value="80000">Below 80,000</option>
-</select>
-
+    <button
+      [class.active]="selectedCategory=='all'"
+      (click)="selectedCategory='all'">
+      All
+    </button>
+    <button
+      [class.active]="selectedCategory=='india'"
+      (click)="selectedCategory='india'">
+      India
+    </button>
+    <button
+      [class.active]="selectedCategory=='international'"
+      (click)="selectedCategory='international'">
+      International
+    </button>
+  </div>
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <!-- Rating Filter -->
+    <select [(ngModel)]="selectedRating">
+      <option value="0">All Ratings</option>
+      <option value="2">Below 3★</option>
+      <option value="3">3★ & above</option>
+      <option value="2">Below 4★</option>
+      <option value="4">4★ & above</option>
+      <option value="5">5★ only</option>
+    </select>
+    <!-- Budget Filter -->
+    <select [(ngModel)]="maxPrice">
+      <option value="100000">All Budgets</option>
+      <option value="20000">Below ₹20,000</option>
+      <option value="50000">Below ₹50,000</option>
+      <option value="80000">Below ₹80,000</option>
+    </select>
+    <!-- Reset Filter -->
+    <button class="reset-btn" (click)="resetFilters()">
+      Reset
+    </button>
+  </div>
+  <!-- Destination Cards -->
   <div class="card-grid">
-    <div class="card" *ngFor="let place of filteredDestinations">
+    <div class="card" *ngFor="let place of visibleDestinations">
       <img [src]="place.image" alt="{{ place.name }}">
       <div class="card-content">
         <h3>{{ place.name }}</h3>
         <p>{{ place.description }}</p>
-        <p>Rating: {{ place.rating }} ⭐</p>
-    <p>Price: ₹{{ place.price }}</p>
-        <button>Explore</button>
+        <p class="rating">{{ '⭐'.repeat(place.rating) }}</p>
+        <p class="price">
+          ₹ {{ place.price }}
+        </p>
+        <button class="explore-btn">
+          Explore
+        </button>
       </div>
     </div>
   </div>
+  <div class="load-more-container">
+  <button
+    class="load-more-btn"
+    *ngIf="visibleCount < filteredDestinations.length"
+    (click)="loadMore()">
+    Load More Destinations
+  </button>
+</div>
+<p *ngIf="filteredDestinations.length === 0" class="no-results">
+No destinations found
+</p>
 </section>

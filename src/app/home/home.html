@@ -1,59 +1,11 @@
-<!--  Navbar  -->
-<nav class="navbar">
-
-  <!-- Left Section -->
-  <div class="nav-left">
-    <button class="menu-btn" (click)="toggleSidebar()">☰</button>
-    <div class="logo">🌊 TripWave</div>
-  </div>
-
-  <!-- Center Links -->
-  <ul class="nav-links">
-    <li routerLink="/">Home</li>
-    <li routerLink="/destinations">Destinations</li>
-    <li routerLink="/packages">Packages</li>
-    <li routerLink="/contact">Contact</li>
-  </ul>
-
-  <!-- Right Button -->
-  <button class="login-btn">Login</button>
-
-</nav>
-
-<!--  Sidebar  -->
-
-<!-- IMPORTANT: Renamed overlay to sidebar-overlay -->
-<div class="sidebar-overlay"
-     *ngIf="isSidebarOpen"
-     (click)="toggleSidebar()">
-</div>
-
-<div class="sidebar" [class.open]="isSidebarOpen">
-
-  <div class="sidebar-header">
-    <h3>🌊 TripWave</h3>
-    <span class="close-btn" (click)="toggleSidebar()">✖</span>
-  </div>
-
-  <ul class="sidebar-links">
-    <li>⚙ Settings</li>
-    <li>🔔 Notifications</li>
-    <li>📊 Reports</li>
-    <li>🆘 Support</li>
-    <hr>
-    <li>🔑 Sign In</li>
-    <li>🚪 Sign Out</li>
-  </ul>
-
-</div>
-
-
 <!--  Hero  -->
 <section class="hero">
   <div class="hero-content">
     <h1>Explore The World With Us</h1>
     <p>Discover breathtaking destinations and unforgettable experiences.</p>
-    <button class="primary-btn">Explore Now</button>
+    <button class="primary-btn" routerLink="/destinations">
+  Explore Now
+</button>
   </div>
 </section>
 

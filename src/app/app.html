@@ -1,1 +1,37 @@
+<nav class="navbar">
+  <div class="nav-left">
+    <button class="menu-btn" (click)="toggleSidebar()">☰</button>
+    <div class="logo">🌊 TripWave</div>
+  </div>
+
+  <ul class="nav-links">
+  <li><a routerLink="/home">Home</a></li>
+  <li><a routerLink="/destinations">Destinations</a></li>
+  <li><a routerLink="/packages">Packages</a></li>
+  <li><a routerLink="/contact">Contact</a></li>
+</ul>
+  <button class="login-btn">Login</button>
+</nav>
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay"
+     *ngIf="isSidebarOpen"
+     (click)="toggleSidebar()">
+</div>
+<!-- Sidebar -->
+<div class="sidebar" [class.open]="isSidebarOpen">
+  <div class="sidebar-header">
+    <h3>🌊 TripWave</h3>
+    <span class="close-btn" (click)="toggleSidebar()">✖</span>
+  </div>
+  <ul class="sidebar-links">
+    <li>⚙ Settings</li>
+    <li>🔔 Notifications</li>
+    <li>📊 Reports</li>
+    <li>🆘 Support</li>
+    <hr>
+    <li>🔑 Sign In</li>
+    <li>🚪 Sign Out</li>
+  </ul>
+</div>
+<!-- Page loads here -->
 <router-outlet></router-outlet>
