@@ -1,35 +1,73 @@
-import { Component } from '@angular/core';
+import { Component,OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+interface Destination {
+  name: string;
+  description: string;
+  image: string;
+  category?: string;
+  rating: number;
+  price: number;
+  lat?: number;
+  lng?: number;
+}
 @Component({
   selector: 'app-destinations',
   imports: [CommonModule,FormsModule],
   templateUrl: './destinations.html',
   styleUrl: './destinations.css',
 })
-export class Destinations {
+export class Destinations implements OnInit {
   sortOption = '';
   visibleCount = 8;
   selectedCategory = 'all';
   selectedRating = 0;
   maxPrice = 100000;
   searchText = '';
+  userLat: number = 0;
+  userLng: number = 0;
+  maxDistance = 5000;
   resetFilters() {
   this.selectedCategory = 'all';
   this.selectedRating = 0;
   this.maxPrice = 100000;
+  this.maxDistance = 20000;
   this.searchText = '';
   this.sortOption = '';
   this.visibleCount = 8;
 }
-  destinations = [
+  ngOnInit(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(position => {
+        this.userLat = position.coords.latitude;
+        this.userLng = position.coords.longitude
+        console.log("User Location:", this.userLat, this.userLng);
+      }
+    );
+    }
+  }
+calculateDistance(lat1:number, lon1:number, lat2:number, lon2:number){
+  const R = 6371;
+  const dLat = (lat2-lat1) * Math.PI/180;
+  const dLon = (lon2-lon1) * Math.PI/180;
+  const a =
+  Math.sin(dLat/2) * Math.sin(dLat/2) +
+  Math.cos(lat1 * Math.PI/180) *
+  Math.cos(lat2 * Math.PI/180) *
+  Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+  destinations: Destination[] = [
     {
       name: 'Goa',
       description: 'Famous for beaches, nightlife and water sports.',
       image: 'assets/goa.jpg',
       category: 'india',
       rating: 5,
-    price: 15000
+      price: 15000,
+      lat: 15.2993,
+  lng: 74.1240
     },
     {
       name: 'Manali',
@@ -37,8 +75,9 @@ export class Destinations {
       image: 'assets/jaipur.jpg',
       category: 'international',
       rating: 4,
-    price: 65000
-
+      price: 65000,
+      lat: 32.2396,
+  lng: 77.1887
     },
     {
   name: 'Ooty',
@@ -46,7 +85,9 @@ export class Destinations {
   image: 'assets/ooty.jpg',
   category: 'india',
   rating: 5,
-    price: 75000
+    price: 75000,
+    lat: 12.2958,
+  lng: 76.6394
 },
 {
   name: 'Mysore',
@@ -54,7 +95,9 @@ export class Destinations {
   image: 'assets/mysore.jpg',
   category: 'india',
   rating: 4,
-    price: 18000
+    price: 18000,
+    lat: 17.3850,
+  lng: 78.4867
 },
 {
   name: 'Hyderabad',
@@ -62,7 +105,9 @@ export class Destinations {
   image: 'assets/hyd.jpg',
   category: 'india',
   rating: 3,
-    price: 5000
+    price: 5000,
+   lat: 17.3850,
+  lng: 78.4867
 },
 {
   name: 'Rishikesh',
@@ -70,7 +115,9 @@ export class Destinations {
   image: 'assets/ris.jpg',
   category: 'india',
   rating: 2,
-    price: 45000
+    price: 45000,
+    lat: 30.0869,
+  lng: 78.2676
 },
 {
   name: 'Shimla',
@@ -78,7 +125,9 @@ export class Destinations {
   image: 'assets/simla.jpg',
   category: 'india',
   rating: 2,
-    price: 45000
+    price: 45000,
+     lat: 31.1048,
+  lng: 77.1734
 },
 {
   name: 'Udaipur',
@@ -86,21 +135,27 @@ export class Destinations {
   image: 'assets/udai.jpg',
   category: 'india',
   rating: 2,
-    price: 54000
+    price: 54000,
+    lat: 24.5854,
+  lng: 73.7125
 },
 {
   name: 'Andaman',
   description: 'Crystal clear waters and peaceful island vibes.',
   image: 'assets/andaman.jpg',
   rating: 5,
-    price: 76000
+    price: 76000,
+   lat: 11.6234,
+  lng: 92.7265
 },
 {
   name: 'Coorg',
   description: 'Coffee plantations and misty mountain views.',
   image: 'assets/coorg.jpg',
   rating: 4,
-    price: 15000
+    price: 15000,
+    lat: 12.4244,
+  lng: 75.7382
 },
 {
   name: 'Varanasi',
@@ -108,7 +163,9 @@ export class Destinations {
   image: 'assets/kasi.jpg',
   category: 'india',
   rating: 3,
-    price: 12000
+    price: 12000,
+    lat: 25.3176,
+  lng: 82.9739
 },
 {
   name: 'Dubai',
@@ -116,7 +173,9 @@ export class Destinations {
   image: 'assets/dubai.jpg',
   category: 'international',
   rating: 4,
-    price: 68000
+    price: 68000,
+    lat: 25.2048,
+  lng: 55.2708
 },
 {
   name: 'Maldives',
@@ -124,7 +183,9 @@ export class Destinations {
   image: 'assets/maldives.jpg',
   category: 'international',
   rating: 3,
-    price: 27000
+    price: 27000,
+    lat: 4.1755,
+  lng: 73.5093
 },
 {
   name: 'Paris',
@@ -132,7 +193,9 @@ export class Destinations {
   image: 'assets/paris.jpg',
   category: 'international',
   rating: 4,
-    price: 36000
+    price: 36000,
+lat: 48.8566,
+  lng: 2.3522
 },
 {
   name: 'Switzerland',
@@ -140,7 +203,9 @@ export class Destinations {
   image: 'assets/swi.jpg',
   category: 'international',
   rating: 2,
-    price: 68000
+    price: 68000,
+   lat: 46.9480,
+  lng: 7.4474
 },
 {
       name: 'Tirupati',
@@ -148,7 +213,9 @@ export class Destinations {
       image: 'assets/ttd.jpg',
       category: 'india',
       rating: 5,
-    price: 1500
+    price: 1500,
+    lat: 13.6288,
+  lng: 79.4192
     },
     {
   name: 'Kedarnath',
@@ -156,7 +223,9 @@ export class Destinations {
   image: 'assets/kedarnath.jpg',
   category: 'india',
   rating: 5,
-  price: 20000
+  price: 20000,
+  lat: 30.7352,
+  lng: 79.0669
 },
 {
   name: 'Pondicherry',
@@ -164,7 +233,9 @@ export class Destinations {
   image: 'assets/pondi cherry.jpg',
   category: 'india',
   rating: 2,
-  price: 12000
+  price: 12000,
+  lat: 11.9416,
+  lng: 79.8083
 },
 {
   name: 'Agra',
@@ -172,7 +243,9 @@ export class Destinations {
   image: 'assets/agra.jpg',
   category: 'india',
   rating: 5,
-  price: 15000
+  price: 15000,
+   lat: 27.1767,
+  lng: 78.0081
 },
 {
   name: 'Ayodhya Ram Mandir',
@@ -180,7 +253,9 @@ export class Destinations {
   image: 'assets/Mandir.jpg',
   category: 'india',
   rating: 5,
-  price: 10000
+  price: 10000,
+  lat: 26.7995,
+  lng: 82.2043
 },
 {
   name: 'Arunachalam',
@@ -188,7 +263,9 @@ export class Destinations {
   image: 'assets/arunachalam.jpg',
   category: 'india',
   rating: 2,
-  price: 25000
+  price: 25000,
+  lat: 12.2253,
+  lng: 79.0747
 },
 {
   name: 'Gateway of India',
@@ -196,7 +273,9 @@ export class Destinations {
   image: 'assets/Gateway-to-India.jpg',
   category: 'india',
   rating: 3,
-  price: 8000
+  price: 8000,
+  lat: 18.9220,
+  lng: 72.8347
 },
 {
   name: 'Meenakshi Temple',
@@ -204,7 +283,9 @@ export class Destinations {
   image: 'assets/mennaksahi.jpg',
   category: 'india',
   rating: 5,
-  price: 9000
+  price: 9000,
+  lat: 9.9195,
+  lng: 78.1193
 },
 {
   name: 'Jagannath Temple',
@@ -212,7 +293,9 @@ export class Destinations {
   image: 'assets/jagannath-temple.jpg',
   category: 'india',
   rating: 5,
-  price: 11000
+  price: 11000,
+  lat: 19.8135,
+  lng: 85.8312
 },
 {
   name: 'Jaipur',
@@ -220,7 +303,9 @@ export class Destinations {
   image: 'assets/jaipur.jpg',
   category: 'india',
   rating: 3,
-  price: 16000
+  price: 16000,
+   lat: 26.9124,
+  lng: 75.7873
 },
 {
   name: 'Gangtok',
@@ -228,7 +313,9 @@ export class Destinations {
   image: 'assets/gangtok.jpg',
   category: 'india',
   rating: 4,
-  price: 22000
+  price: 22000,
+  lat: 27.3389,
+  lng: 88.6065
 },
 {
   name: 'Red Fort',
@@ -236,7 +323,9 @@ export class Destinations {
   image: 'assets/redfort.jpg',
   category: 'india',
   rating: 4,
-  price: 9000
+  price: 9000,
+ lat: 28.6562,
+  lng: 77.2410
 },
 {
   name: 'Golden Temple',
@@ -244,7 +333,9 @@ export class Destinations {
   image: 'assets/golden temple.jpg',
   category: 'india',
   rating: 5,
-  price: 12000
+  price: 12000,
+  lat: 31.6200,
+  lng: 74.8765
 },
 {
   name: 'Hong Kong',
@@ -252,7 +343,9 @@ export class Destinations {
   image: 'assets/Hong kong.jpg',
   category: 'international',
   rating: 4,
-  price: 85000
+  price: 85000,
+  lat: 22.3193,
+  lng: 114.1694
 },
 {
   name: 'Tokyo',
@@ -260,7 +353,9 @@ export class Destinations {
   image: 'assets/tokyo.jpg',
   category: 'international',
   rating: 3,
-  price: 90000
+  price: 90000,
+  lat: 35.6762,
+  lng: 139.6503
 },
 {
   name: 'Vietnam',
@@ -268,7 +363,9 @@ export class Destinations {
   image: 'assets/vietnam.jpg',
   category: 'international',
   rating: 4,
-  price: 70000
+  price: 70000,
+  lat: 21.0278,
+  lng: 105.8342
 },
 {
   name: 'Bangkok',
@@ -276,7 +373,9 @@ export class Destinations {
   image: 'assets/bangkok.jpg',
   category: 'international',
   rating: 4,
-  price: 65000
+  price: 65000,
+  lat: 13.7563,
+  lng: 100.5018
 },
 {
   name: 'Bali',
@@ -284,7 +383,9 @@ export class Destinations {
   image: 'assets/bali.jpg',
   category: 'international',
   rating: 2,
-  price: 75000
+  price: 75000,
+ lat: -8.3405,
+  lng: 115.0920
 },
 {
   name: 'Abu Dhabi',
@@ -292,7 +393,9 @@ export class Destinations {
   image: 'assets/abu dhabi.jpg',
   category: 'international',
   rating: 4,
-  price: 80000
+  price: 80000,
+  lat: 24.4539,
+  lng: 54.3773
 },
 {
   name: 'Nepal',
@@ -300,7 +403,9 @@ export class Destinations {
   image: 'assets/munnar.jpg',
   category: 'india',
   rating: 3,
-  price: 15000
+  price: 15000,
+  lat: 27.7172,
+  lng: 85.3240
 },
 {
   name: 'Singapore',
@@ -308,7 +413,9 @@ export class Destinations {
   image: 'assets/sing.jpg',
   category: 'international',
   rating: 5,
-  price: 88000
+  price: 88000,
+  lat: 1.3521,
+  lng: 103.8198
 },
 {
   name: 'Munnar',
@@ -316,7 +423,9 @@ export class Destinations {
   image: 'assets/munnar.jpg',
   category: 'india',
   rating: 4,
-  price: 15000
+  price: 15000,
+  lat: 1.3521,
+  lng: 103.8198
 },
 {
   name: 'Shillong',
@@ -324,7 +433,9 @@ export class Destinations {
   image: 'assets/shillong.jpg',
   category: 'india',
   rating: 4,
-  price: 18000
+  price: 18000,
+  lat: 25.5788,
+  lng: 91.8933
 },
 {
   name: 'Statue of Unity',
@@ -332,7 +443,9 @@ export class Destinations {
   image: 'assets/statue-of-unity.jpg',
   category: 'india',
   rating: 4,
-  price: 12000
+  price: 12000,
+  lat: 21.8380,
+  lng: 73.7191
 },
 {
   name: 'Katra (Vaishno Devi)',
@@ -340,7 +453,9 @@ export class Destinations {
   image: 'assets/katra.jpg',
   category: 'india',
   rating: 5,
-  price: 10000
+  price: 10000,
+  lat: 32.9916,
+  lng: 74.9316
 },
 {
   name: 'Aurangabad',
@@ -348,7 +463,9 @@ export class Destinations {
   image: 'assets/aurangabad,jpg.jpg',
   category: 'india',
   rating: 4,
-  price: 14000
+  price: 14000,
+  lat: 19.8762,
+  lng: 75.3433
 },
 {
   name: 'Rajas Seat Coorg',
@@ -356,7 +473,9 @@ export class Destinations {
   image: 'assets/rajas-seat.jpg',
   category: 'india',
   rating: 4,
-  price: 16000
+  price: 16000,
+  lat: 12.4210,
+  lng: 75.7382
 },
 {
   name: 'Kolkata',
@@ -364,7 +483,9 @@ export class Destinations {
   image: 'assets/kolkata.jpg',
   category: 'india',
   rating: 4,
-  price: 13000
+  price: 13000,
+  lat: 22.5726,
+  lng: 88.3639
 },
 {
   name: 'Nubra Valley',
@@ -372,7 +493,9 @@ export class Destinations {
   image: 'assets/Nubra Valley.jpg',
   category: 'india',
   rating: 5,
-  price: 25000
+  price: 25000,
+  lat: 34.5944,
+  lng: 77.5676
 },
 {
   name: 'Sahara desert',
@@ -380,7 +503,9 @@ export class Destinations {
   image: 'assets/Nubra Valley.jpg',
   category: 'india',
   rating: 5,
-  price: 25000
+  price: 25000,
+  lat: 23.4162,
+  lng: 25.6628
 },
 {
   name: 'Dwaraka',
@@ -388,7 +513,9 @@ export class Destinations {
   image: 'assets/dwaraka.jpg',
   category: 'india',
   rating: 4,
-  price: 11000
+  price: 11000,
+  lat: 22.2442,
+  lng: 68.9685
 },
 {
   name: 'Rameshwaram',
@@ -396,7 +523,9 @@ export class Destinations {
   image: 'assets/rameshwaram.jpg',
   category: 'india',
   rating: 4,
-  price: 12000
+  price: 12000,
+  lat: 9.2881,
+  lng: 79.3129
 },
 
 {
@@ -405,7 +534,9 @@ export class Destinations {
   image: 'assets/malaysia.jpg',
   category: 'international',
   rating: 4,
-  price: 65000
+  price: 65000,
+  lat: 3.1390,
+  lng: 101.6869
 },
 {
   name: 'London',
@@ -413,7 +544,9 @@ export class Destinations {
   image: 'assets/malaysia.jpg',
   category: 'international',
   rating: 4,
-  price: 65000
+  price: 65000,
+  lat: 51.5074,
+  lng: -0.1278
 },
 {
   name: 'Thailand',
@@ -421,7 +554,9 @@ export class Destinations {
   image: 'assets/thailand.jpg',
   category: 'international',
   rating: 4,
-  price: 55000
+  price: 55000,
+  lat: 13.7563,
+  lng: 100.5018
 },
 {
   name: 'Austraila',
@@ -429,7 +564,9 @@ export class Destinations {
   image: 'assets/thailand.jpg',
   category: 'international',
   rating: 4,
-  price: 55000
+  price: 55000,
+  lat: -33.8688,
+  lng: 151.2093
 },
 {
   name: 'Indonesia',
@@ -437,7 +574,9 @@ export class Destinations {
   image: 'assets/indonesia.jpg',
   category: 'international',
   rating: 4,
-  price: 60000
+  price: 60000,
+  lat: -6.2088,
+  lng: 106.8456
 },
 {
   name: 'Greece',
@@ -445,7 +584,10 @@ export class Destinations {
   image: 'assets/greece.jpg',
   category: 'international',
   rating: 4,
-  price: 85000
+  price: 85000,
+  lat: 37.9838,
+  lng: 23.7275
+
 },
 {
   name: 'Canada',
@@ -453,7 +595,9 @@ export class Destinations {
   image: 'assets/canada.jpg',
   category: 'international',
   rating: 5,
-  price: 95000
+  price: 95000,
+  lat: 45.4215,
+  lng: -75.6972
 },
 {
   name: 'Italy',
@@ -461,7 +605,9 @@ export class Destinations {
   image: 'assets/italy.jpg',
   category: 'international',
   rating: 5,
-  price: 88000
+  price: 88000,
+  lat: 45.4215,
+  lng: -75.6972
 },
 {
   name: 'New Zealand',
@@ -469,7 +615,9 @@ export class Destinations {
   image: 'assets/new-zealand.jpg',
   category: 'international',
   rating: 5,
-  price: 100000
+  price: 100000,
+  lat: -41.2866,
+  lng: 174.7756
 },
 {
   name: 'Egypt',
@@ -477,7 +625,9 @@ export class Destinations {
   image: 'assets/egypt.jpg',
   category: 'international',
   rating: 4,
-  price: 80000
+  price: 80000,
+  lat: 30.0444,
+  lng: 31.2357
 },
 {
   name: 'United Kingdom',
@@ -485,22 +635,25 @@ export class Destinations {
   image: 'assets/uk.jpg',
   category: 'international',
   rating: 4,
-  price: 85000
+  price: 85000,
+  lat: 51.5074,
+  lng: -0.1278
 }
 
-  ];
-  ngOnInit() {
-  this.sortDestinations();
-}
-sortDestinations() {
-  this.destinations.sort((a, b) =>
-    a.name.localeCompare(b.name)
-  );
-}
+];
 get filteredDestinations() {
+  let results = this.destinations.filter((d: Destination) => {
+    if (d.lat === undefined || d.lng === undefined) {
+  return false;
+}
 
-  let results = this.destinations.filter(d => {
-
+const distance = this.calculateDistance(
+  this.userLat,
+  this.userLng,
+  d.lat as number,
+  d.lng as number
+);
+const matchDistance = distance <= this.maxDistance;
     const matchCategory =
       this.selectedCategory == 'all' ||
       d.category == this.selectedCategory;
@@ -526,7 +679,7 @@ get filteredDestinations() {
     const matchSearch =
       d.name.toLowerCase().includes((this.searchText || '').toLowerCase());
 
-    return matchCategory && matchRating && matchPrice && matchSearch;
+    return matchCategory && matchRating && matchPrice && matchSearch && matchDistance;
 
   });
   // Sorting

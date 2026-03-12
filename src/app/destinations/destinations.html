@@ -50,6 +50,12 @@
       <option value="50000">Below ₹50,000</option>
       <option value="80000">Below ₹80,000</option>
     </select>
+    <select [(ngModel)]="maxDistance">
+      <option value="20000">Anywhere</option>
+  <option value="500">Within 500 km</option>
+  <option value="1000">Within 1000 km</option>
+  <option value="5000">Within 5000 km</option>
+</select>
     <!-- Sort Filter -->
     <select [(ngModel)]="sortOption">
        <option value="">Sort By</option>
@@ -73,6 +79,9 @@
         <p class="price">
           ₹ {{ place.price }}
         </p>
+        <p class="distance">
+  📍 {{ calculateDistance(userLat, userLng, place.lat ?? 0, place.lng ?? 0) | number:'1.0-0' }} km away
+</p>
         <button class="explore-btn">
           Explore
         </button>
