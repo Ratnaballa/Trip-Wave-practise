@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './destinations.css',
 })
 export class Destinations {
+  sortOption = '';
   visibleCount = 8;
   selectedCategory = 'all';
   selectedRating = 0;
@@ -18,6 +19,8 @@ export class Destinations {
   this.selectedRating = 0;
   this.maxPrice = 100000;
   this.searchText = '';
+  this.sortOption = '';
+  this.visibleCount = 8;
 }
   destinations = [
     {
@@ -180,7 +183,7 @@ export class Destinations {
   price: 10000
 },
 {
-  name: 'Arunachal Pradesh',
+  name: 'Arunachalam',
   description: 'Beautiful northeastern state with mountains and monasteries.',
   image: 'assets/arunachalam.jpg',
   category: 'india',
@@ -495,7 +498,8 @@ sortDestinations() {
   );
 }
 get filteredDestinations() {
-  return this.destinations.filter(d => {
+
+  let results = this.destinations.filter(d => {
 
     const matchCategory =
       this.selectedCategory == 'all' ||
@@ -525,6 +529,20 @@ get filteredDestinations() {
     return matchCategory && matchRating && matchPrice && matchSearch;
 
   });
+  // Sorting
+  if(this.sortOption === 'priceLow'){
+    results.sort((a,b)=> a.price - b.price);
+  }
+
+  if(this.sortOption === 'priceHigh'){
+    results.sort((a,b)=> b.price - a.price);
+  }
+
+  if(this.sortOption === 'ratingHigh'){
+    results.sort((a,b)=> b.rating - a.rating);
+  }
+
+  return results;
 }
 get visibleDestinations() {
   return this.filteredDestinations.slice(0, this.visibleCount);

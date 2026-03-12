@@ -3,15 +3,18 @@
     <button class="menu-btn" (click)="toggleSidebar()">☰</button>
     <div class="logo">🌊 TripWave</div>
   </div>
-
   <ul class="nav-links">
-  <li><a routerLink="/home">Home</a></li>
-  <li><a routerLink="/destinations">Destinations</a></li>
-  <li><a routerLink="/packages">Packages</a></li>
-  <li><a routerLink="/contact">Contact</a></li>
-</ul>
+    <li><a routerLink="/home">Home</a></li>
+    <li><a routerLink="/destinations">Destinations</a></li>
+    <li><a routerLink="/packages">Packages</a></li>
+    <li><a routerLink="/contact">Contact</a></li>
+  </ul>
   <button class="login-btn">Login</button>
 </nav>
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content">
+  <router-outlet></router-outlet>
+</div>
 <!-- Sidebar Overlay -->
 <div class="sidebar-overlay"
      *ngIf="isSidebarOpen"

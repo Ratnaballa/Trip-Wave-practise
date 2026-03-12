@@ -8,6 +8,7 @@
   <h2>Popular Destinations</h2>
   <!-- Category Filter -->
   <div class="filter-buttons">
+
     <button
       [class.active]="selectedCategory=='all'"
       (click)="selectedCategory='all'">
@@ -26,6 +27,13 @@
   </div>
   <!-- Filter Bar -->
   <div class="filter-bar">
+    <div class="search-box">
+    <input
+      type="text"
+      placeholder=" Search destination..."
+      [(ngModel)]="searchText"
+    />
+  </div>
     <!-- Rating Filter -->
     <select [(ngModel)]="selectedRating">
       <option value="0">All Ratings</option>
@@ -41,6 +49,13 @@
       <option value="20000">Below ₹20,000</option>
       <option value="50000">Below ₹50,000</option>
       <option value="80000">Below ₹80,000</option>
+    </select>
+    <!-- Sort Filter -->
+    <select [(ngModel)]="sortOption">
+       <option value="">Sort By</option>
+        <option value="priceLow">Price: Low → High</option>
+        <option value="priceHigh">Price: High → Low</option>
+      <option value="ratingHigh">Rating: High → Low</option>
     </select>
     <!-- Reset Filter -->
     <button class="reset-btn" (click)="resetFilters()">
