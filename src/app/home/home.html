@@ -8,8 +8,6 @@
 </button>
   </div>
 </section>
-
-
 <!--  Popular Destinations   -->
 <section class="destinations">
   <h2 class="section-title">Popular Destinations</h2>
@@ -22,7 +20,7 @@
 
         <!-- This stays as card-overlay -->
         <div class="card-overlay">
-          <button class="view-btn">View Details</button>
+          <button class="view-btn" [routerLink]="['/explore', place.id]">View Details</button>
         </div>
       </div>
 

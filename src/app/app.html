@@ -27,13 +27,13 @@
     <span class="close-btn" (click)="toggleSidebar()">✖</span>
   </div>
   <ul class="sidebar-links">
-    <li>⚙ Settings</li>
-    <li>🔔 Notifications</li>
-    <li>📊 Reports</li>
-    <li>🆘 Support</li>
+    <li routerLink="/settings" (click)="toggleSidebar()">⚙ Settings</li>
+    <li routerLink="/notifications" (click)="toggleSidebar()">🔔 Notifications</li>
+    <li routerLink="/reports" (click)="toggleSidebar()">📊 Reports</li>
+    <li routerLink="/support" (click)="toggleSidebar()">🆘 Support</li>
     <hr>
-    <li>🔑 Sign In</li>
-    <li>🚪 Sign Out</li>
+    <li routerLink="/signin" (click)="toggleSidebar()">🔑 Sign In</li>
+    <li (click)="signOut()">🚪 Sign Out</li>
   </ul>
 </div>
 <!-- Page loads here -->

@@ -1,69 +1,4 @@
-import { Component,OnInit} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-interface Destination {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  category?: string;
-  rating: number;
-  price: number;
-  lat?: number;
-  lng?: number;
-}
-@Component({
-  selector: 'app-destinations',
-  imports: [CommonModule,FormsModule,RouterLink],
-  templateUrl: './destinations.html',
-  styleUrl: './destinations.css',
-})
-export class Destinations implements OnInit {
-  sortOption = '';
-  visibleCount = 8;
-  selectedCategory = 'all';
-  selectedRating = 0;
-  maxPrice = 100000;
-  searchText = '';
-  userLat: number = 0;
-  userLng: number = 0;
-  maxDistance = 5000;
-  resetFilters() {
-  this.selectedCategory = 'all';
-  this.selectedRating = 0;
-  this.maxPrice = 100000;
-  this.maxDistance = 20000;
-  this.searchText = '';
-  this.sortOption = '';
-  this.visibleCount = 8;
-}
-  ngOnInit(){
-    this.destinations.sort((a,b)=>
-a.name.localeCompare(b.name)
-);
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(position => {
-        this.userLat = position.coords.latitude;
-        this.userLng = position.coords.longitude
-        console.log("User Location:", this.userLat, this.userLng);
-      }
-    );
-    }
-  }
-calculateDistance(lat1:number, lon1:number, lat2:number, lon2:number){
-  const R = 6371;
-  const dLat = (lat2-lat1) * Math.PI/180;
-  const dLon = (lon2-lon1) * Math.PI/180;
-  const a =
-  Math.sin(dLat/2) * Math.sin(dLat/2) +
-  Math.cos(lat1 * Math.PI/180) *
-  Math.cos(lat2 * Math.PI/180) *
-  Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
-}
-  destinations: Destination[] = [
+export const DESTINATIONS = [
     {
       id:0,
       name: 'Goa',
@@ -105,8 +40,8 @@ calculateDistance(lat1:number, lon1:number, lat2:number, lon2:number){
   category: 'india',
   rating: 4,
     price: 18000,
-    lat: 17.3850,
-  lng: 78.4867
+    lat: 12.2958,
+    lng: 76.6394
 },
 {
   id:4,
@@ -466,8 +401,8 @@ lat: 48.8566,
   category: 'india',
   rating: 4,
   price: 15000,
-  lat: 1.3521,
-  lng: 103.8198
+  lat: 10.0889,
+lng: 77.0595
 },
 {
   id:37,
@@ -554,8 +489,8 @@ lat: 48.8566,
   category: 'india',
   rating: 5,
   price: 25000,
-  lat: 23.4162,
-  lng: 25.6628
+  lat: 25.4162,
+  lng: 14.4387
 },
 {
   id:45,
@@ -702,68 +637,4 @@ lat: 48.8566,
   lat: 51.5074,
   lng: -0.1278
 }
-
-];
-get filteredDestinations() {
-  let results = this.destinations.filter((d: Destination) => {
-    if (d.lat === undefined || d.lng === undefined) {
-  return false;
-}
-
-const distance = this.calculateDistance(
-  this.userLat,
-  this.userLng,
-  d.lat as number,
-  d.lng as number
-);
-const matchDistance = distance <= this.maxDistance;
-    const matchCategory =
-      this.selectedCategory == 'all' ||
-      d.category == this.selectedCategory;
-
-    let matchRating = true;
-
-    if (this.selectedRating == 2) {
-      matchRating = d.rating < 3;
-    }
-    else if (this.selectedRating == 3) {
-      matchRating = d.rating >= 3;
-    }
-    else if (this.selectedRating == 4) {
-      matchRating = d.rating >= 4;
-    }
-    else if (this.selectedRating == 5) {
-      matchRating = d.rating == 5;
-    }
-
-    const matchPrice =
-      d.price <= Number(this.maxPrice);
-
-    const matchSearch =
-      d.name.toLowerCase().includes((this.searchText || '').toLowerCase());
-
-    return matchCategory && matchRating && matchPrice && matchSearch && matchDistance;
-
-  });
-  // Sorting
-  if(this.sortOption === 'priceLow'){
-    results.sort((a,b)=> a.price - b.price);
-  }
-
-  if(this.sortOption === 'priceHigh'){
-    results.sort((a,b)=> b.price - a.price);
-  }
-
-  if(this.sortOption === 'ratingHigh'){
-    results.sort((a,b)=> b.rating - a.rating);
-  }
-
-  return results;
-}
-get visibleDestinations() {
-  return this.filteredDestinations.slice(0, this.visibleCount);
-}
-loadMore() {
-  this.visibleCount += 8;
-}
-}
+]

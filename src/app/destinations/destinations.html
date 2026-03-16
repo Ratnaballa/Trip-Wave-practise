@@ -82,9 +82,9 @@
         <p class="distance">
   📍 {{ calculateDistance(userLat, userLng, place.lat ?? 0, place.lng ?? 0) | number:'1.0-0' }} km away
 </p>
-        <button class="explore-btn">
-          Explore
-        </button>
+        <button [routerLink]="['/explore', place.id]" class="explore-btn">
+  Explore
+</button>
       </div>
     </div>
   </div>
@@ -96,7 +96,7 @@
     Load More Destinations
   </button>
 </div>
-<p *ngIf="filteredDestinations.length === 0" class="no-results">
-No destinations found
+<p *ngIf="filteredDestinations.length === 0" class="no-results" style="font-size: larger; color: rgb(17, 5, 127);">
+No destinations found 
 </p>
 </section>
