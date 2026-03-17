@@ -1,4 +1,71 @@
-body{
-margin:0;
-padding-top:70px;
+:root {
+  /* Modern Color Palette */
+  --bg-color: #f8fafc;
+  --nav-bg: rgba(10, 31, 68, 0.85); /* Glassmorphic navy */
+  --nav-blur: 12px;
+  --primary: #0ea5e9; /* Vibrant Cyan */
+  --primary-hover: #0284c7;
+  --primary-glow: rgba(14, 165, 233, 0.4);
+  --text-main: #0f172a;
+  --text-light: #64748b;
+  --sidebar-bg: #0f172a;
+  --footer-bg: #020617;
+  --card-bg: #ffffff;
+  
+  /* Typography */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Shadows and Transitions */
+  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+  --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding-top: 70px;
+  font-family: var(--font-body);
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Premium Primary Button (Global) */
+.primary-btn {
+  background: linear-gradient(135deg, var(--primary), #38bdf8);
+  border: none;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--primary-glow);
+  background: linear-gradient(135deg, var(--primary-hover), var(--primary));
 }
