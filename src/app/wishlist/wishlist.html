@@ -1,0 +1,45 @@
+<div class="wishlist-page">
+
+  <h1>❤️ Your Wishlist</h1>
+
+  <!-- Empty state -->
+  <div class="empty" *ngIf="wishlistItems.length === 0">
+    <p>No favorites yet 🥺</p>
+    <a routerLink="/packages">Explore Packages</a>
+  </div>
+
+  <!-- Cards -->
+  <div class="grid" *ngIf="wishlistItems.length > 0">
+
+    <div class="card" *ngFor="let item of wishlistItems">
+
+      <div class="img-wrapper">
+        <img [src]="item.image" />
+
+        <!-- remove button -->
+        <span class="remove" (click)="remove(item.id)">✖</span>
+      </div>
+
+      <div class="card-body">
+
+        <h2>{{ item.name }}</h2>
+
+        <p class="desc">{{ item.description }}</p>
+
+        <div class="meta">
+          <span>⭐ {{ item.rating }}</span>
+          <span>{{ item.category }}</span>
+        </div>
+
+        <div class="price">
+          {{ currencyService.getCurrencySymbol(item.category) }}
+          {{ currencyService.convertPrice(item.price, item.category) }}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -71,20 +71,30 @@
   <!-- Destination Cards -->
   <div class="card-grid">
     <div class="card" *ngFor="let place of visibleDestinations">
-      <img [src]="place.image" alt="{{ place.name }}">
+      <div class="card-image-wrapper">
+        <img [src]="place.image" alt="{{ place.name }}">
+        <div class="card-overlay" [routerLink]="['/explore', place.id]">
+          <span class="overlay-text">View Details</span>
+        </div>
+        <div class="rating-badge">
+          <b>{{ place.rating }}</b> <span class="star-icon">★</span>
+        </div>
+      </div>
       <div class="card-content">
-        <h3>{{ place.name }}</h3>
-        <p>{{ place.description }}</p>
-        <p class="rating">{{ '⭐'.repeat(place.rating) }}</p>
-        <p class="price">
-          ₹ {{ place.price }}
-        </p>
-        <p class="distance">
-  📍 {{ calculateDistance(userLat, userLng, place.lat ?? 0, place.lng ?? 0) | number:'1.0-0' }} km away
-</p>
-        <button [routerLink]="['/explore', place.id]" class="explore-btn">
-  Explore
-</button>
+        <div class="card-header">
+          <h3>{{ place.name }}</h3>
+          <span class="price">{{ currencyService.getCurrencySymbol(place.category) }} {{ currencyService.convertPrice(place.price, place.category) }}</span>
+        </div>
+        <p class="description">{{ place.description }}</p>
+        
+        <div class="card-footer">
+          <span class="distance">
+            📍 {{ calculateDistance(userLat, userLng, place.lat ?? 0, place.lng ?? 0) | number:'1.0-0' }} km away
+          </span>
+          <button [routerLink]="['/explore', place.id]" class="explore-btn">
+            Explore <span class="arrow">→</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

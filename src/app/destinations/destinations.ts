@@ -2,6 +2,7 @@ import { Component,OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Currency } from '../currency';
 interface Destination {
   id: number;
   name: string;
@@ -29,6 +30,8 @@ export class Destinations implements OnInit {
   userLat: number = 0;
   userLng: number = 0;
   maxDistance = 5000;
+
+  constructor(public currencyService: Currency) {}
   resetFilters() {
   this.selectedCategory = 'all';
   this.selectedRating = 0;

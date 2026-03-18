@@ -1,0 +1,63 @@
+<div class="packages-page">
+
+  <!-- 🔍 Top Bar -->
+  <div class="top-bar">
+    <input
+      type="text"
+      placeholder="Search destinations..."
+      [(ngModel)]="searchText"
+      (input)="applyFilters()"
+    />
+
+    <select [(ngModel)]="selectedCategory" (change)="applyFilters()">
+      <option value="">All</option>
+      <option value="domestic">India</option>
+      <option value="international">International</option>
+    </select>
+
+    <select [(ngModel)]="sortOption" (change)="applyFilters()">
+      <option value="">Sort</option>
+      <option value="priceLow">Price Low → High</option>
+      <option value="priceHigh">Price High → Low</option>
+      <option value="rating">Top Rated</option>
+    </select>
+  </div>
+
+  <!-- 🧾 Grid -->
+  <div class="packages-grid">
+    <div class="card" *ngFor="let pkg of filteredPackages">
+
+      <div class="img-wrapper">
+        <img [src]="pkg.image" />
+
+        <!-- 🏷 badge -->
+        <span class="badge" *ngIf="pkg.rating >= 4.5">🔥 Popular</span>
+
+        <!-- ❤️ wishlist -->
+        <span class="wishlist" (click)="wishlistService.toggle(pkg.id)">
+  {{ wishlistService.isWishlisted(pkg.id) ? '❤️' : '🤍' }}
+</span>
+      </div>
+
+      <div class="card-body">
+        <h2>{{ pkg.name }}</h2>
+
+        <p class="desc">{{ pkg.description }}</p>
+
+        <div class="meta">
+          <span>⭐ {{ pkg.rating }}</span>
+          <span>{{ pkg.category }}</span>
+        </div>
+
+        <div class="price">
+          {{ currencyService.getCurrencySymbol(pkg.category) }}
+          {{ currencyService.convertPrice(pkg.price, pkg.category) }}
+          <span>/person</span>
+        </div>
+
+        <button (click)="viewDetails(pkg.id)">View Details →</button>
+      </div>
+
+    </div>
+  </div>
+</div>

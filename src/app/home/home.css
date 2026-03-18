@@ -5,7 +5,7 @@
               url('https://wallpaperaccess.com/full/1192255.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Parallax effect */
+  /* background-attachment: fixed; -> Removed to prevent severe scroll lag */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +34,7 @@
 }
 
 .hero-content h1 {
-  font-size: 56px;
+  font-size: 46px;
   line-height: 1.1;
   margin-bottom: 24px;
   text-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -73,15 +73,15 @@
   bottom: -15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
+  width: 56px;
   height: 4px;
   background: var(--primary);
   border-radius: 4px;
 }
 
 .card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
   padding: 20px 0;
 }
@@ -91,7 +91,10 @@
   border-radius: 16px;
   box-shadow: var(--shadow-soft);
   overflow: hidden;
-  transition: var(--transition-smooth);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  transform: translateZ(0); /* Forces GPU compositing */
   border: 1px solid rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
@@ -105,7 +108,7 @@
 .image-wrapper {
   position: relative;
   overflow: hidden;
-  height: 220px; /* Taller image */
+  height: 280px; /* Taller image */
 }
 
 .image-wrapper img {
@@ -113,10 +116,12 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .card:hover .image-wrapper img {
-  transform: scale(1.08); /* Zoom effect */
+  transform: scale(1.08); 
 }
 
 .card-overlay {
@@ -148,7 +153,8 @@
   -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transform: translateY(20px);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s ease, background-color 0.4s ease;
+  will-change: transform;
 }
 
 .card:hover .view-btn {
@@ -198,7 +204,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(149, 230, 240, 0.1) 0%, transparent 60%);
   animation: rotateGradient 20s linear infinite;
   z-index: 1;
 }

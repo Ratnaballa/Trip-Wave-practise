@@ -1,0 +1,29 @@
+<div class="booking-page" *ngIf="destination">
+
+  <h1>🧾 Book Your Trip</h1>
+
+  <div class="booking-card">
+
+    <img [src]="destination.image" />
+
+    <h2>{{ destination.name }}</h2>
+
+    <p class="price">
+      {{ currencyService.getCurrencySymbol(destination.category) }}
+      {{ currencyService.convertPrice(destination.price, destination.category) }}
+      / person
+    </p>
+
+    <input type="text" [(ngModel)]="name" placeholder="Your Name" />
+
+    <input type="date" [(ngModel)]="date" />
+
+    <input type="number" [(ngModel)]="people" min="1" />
+
+    <button (click)="confirmBooking()">
+      Confirm Booking ✅
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,41 @@
+.booking-page {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+}
+.booking-card {
+  width: 400px;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.booking-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0ea5e9;
+  margin: 10px 0;
+}
+input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin-top: 10px;
+}

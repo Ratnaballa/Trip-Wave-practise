@@ -28,12 +28,13 @@
 }
 
 .nav-links {
+  align-items: center;
   display: flex;
   gap: 35px;
   list-style: none;
   margin: 0;
   padding: 0;
-  margin-left: 40px; /* Added spacing between logo and links */
+  margin-left: 40px; 
   margin-right: 100px;
 }
 
@@ -211,4 +212,15 @@
     display: none;
   }
 
+}
+.wishlist-icon {
+  font-size: 22px;
+  color: #ef4444;
+  margin-left: 15px;
+  transition: 0.3s;
+}
+
+.wishlist-icon:hover {
+  transform: scale(1.2);
+  color: #dc2626;
 }

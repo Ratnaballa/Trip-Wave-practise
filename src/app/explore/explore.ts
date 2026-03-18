@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DESTINATIONS } from '../destinations-data';
+import { Currency } from '../currency';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-explore',
   imports: [CommonModule],
@@ -15,8 +17,14 @@ export class Explore {
   mapUrl: any;
   constructor(
   private route: ActivatedRoute,
-  private sanitizer: DomSanitizer
+  private sanitizer: DomSanitizer,
+  private router: Router,
+  public currencyService: Currency,
 ) {}
+  goToBooking() {
+    console.log("Button clicked");
+  this.router.navigate(['/bookings', this.destination.id]);
+}
   destinations = DESTINATIONS;
   ngOnInit(){
     this.destinationId = Number(this.route.snapshot.paramMap.get('id'));

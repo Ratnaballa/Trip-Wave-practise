@@ -1,19 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule, RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { WishlistService } from './services/wishlist';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterModule, RouterLink, CommonModule],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']  
 })
-export class App {
+export class App implements OnInit {
 
+  wishlistCount = 0;
   isSidebarOpen = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private wishlistService: WishlistService,
+    private router: Router 
+  ) {}
+
+  ngOnInit() {
+    this.wishlistService.wishlistCount$.subscribe(count => {
+      console.log("Navbar count updated:", count);
+      this.wishlistCount = count;
+    });
+  }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
