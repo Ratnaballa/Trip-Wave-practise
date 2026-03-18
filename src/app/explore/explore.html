@@ -1,59 +1,185 @@
 <div class="explore-page" *ngIf="destination">
+
   <!-- Hero Section -->
-  <div class="explore-hero" [style.backgroundImage]="'linear-gradient(rgba(0, 0, 0, 0.4), rgba(15, 23, 42, 0.9)), url(' + destination.image + ')'">
-    <div class="hero-content-wrapper">
-      <div class="title-section">
-        <h1 class="explore-title">{{ destination.name }}</h1>
-        <div class="rating-badge-large">
-          <span class="star-icon">★</span> <b>{{ destination.rating }}</b> / 5
+  <div class="explore-hero" [style.backgroundImage]="'url(' + destination.image + ')'">
+    <div class="hero-overlay">
+      <div class="hero-content-wrapper">
+        <div class="title-section">
+          <span class="category-tag">{{ destination.category === 'india' ? '🇮🇳 India' : '🌍 International' }}</span>
+          <h1 class="explore-title">{{ destination.name }}</h1>
+          <div class="hero-meta">
+            <div class="rating-badge-large">
+              <span>★</span> <b>{{ destination.rating }}</b> / 5
+            </div>
+            <div class="location-badge">
+              📍 {{ destination.name }}
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="price-badge-large">
-        <span class="currency">{{ currencyService.getCurrencySymbol(destination.category) }}</span>
-        <span class="amount">{{ currencyService.convertPrice(destination.price, destination.category) }}</span>
-        <span class="per-person">/ person</span>
+        <div class="price-badge-large">
+          <span class="per-person-label">Starting from</span>
+          <div class="price-row">
+            <span class="currency">{{ currencyService.getCurrencySymbol(destination.category) }}</span>
+            <span class="amount">{{ currencyService.convertPrice(destination.price, destination.category) }}</span>
+          </div>
+          <span class="per-person">per person / day</span>
+        </div>
       </div>
     </div>
   </div>
-  <div class="explore-content-grid">   
-    <!-- Main Info Column -->
-    <div class="main-column">
-      <div class="glass-card about-card">
-        <h2 class="section-title">About this Destination</h2>
-        <p class="explore-description">{{ destination.description }}</p>
-      </div>
-      <div class="grid-2col">
-        <div class="glass-card list-card">
-          <div class="card-header-icon">🗺️</div>
-          <h2 class="section-title">Must Visit Places</h2>
-          <ul class="explore-list">
-            <li>Ancient Temples</li>
-            <li>Scenic Beaches & Coastlines</li>
-            <li>Famous Local Markets</li>
-          </ul>
-        </div>
-        <div class="glass-card list-card">
-          <div class="card-header-icon">🏨</div>
-          <h2 class="section-title">Top Hotels</h2>
-          <ul class="explore-list">
-            <li>Grand Paradise Resort</li>
-            <li>Ocean View Boutique</li>
-            <li>Mountain Retreat Lodge</li>
-          </ul>
-        </div>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-icon">⭐</span>
+      <div>
+        <span class="stat-value">{{ destination.rating }}/5</span>
+        <span class="stat-label">Rating</span>
       </div>
     </div>
-    <!-- Sidebar Column -->
-    <div class="sidebar-column">
-      <div class="glass-card action-card">
-        <h3>Ready to go?</h3>
-        <p>Book your complete travel package today and enjoy exclusive discounts.</p>
-        <button class="book-btn" (click)="goToBooking()">
-  Book Now →
-</button>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-icon">💰</span>
+      <div>
+        <span class="stat-value">{{ currencyService.getCurrencySymbol(destination.category) }}{{ currencyService.convertPrice(destination.price, destination.category) }}</span>
+        <span class="stat-label">Per Person</span>
       </div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-icon">🗺️</span>
+      <div>
+        <span class="stat-value">{{ destination.category === 'india' ? 'Domestic' : 'International' }}</span>
+        <span class="stat-label">Trip Type</span>
+      </div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-icon">✈️</span>
+      <div>
+        <span class="stat-value">Available</span>
+        <span class="stat-label">Booking Status</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="explore-content-grid">
+
+    <!-- Left Column -->
+    <div class="main-column">
+
+      <!-- About -->
+      <div class="glass-card about-card">
+        <div class="card-title-row">
+          <span class="card-icon">📖</span>
+          <h2 class="section-title">About this Destination</h2>
+        </div>
+        <p class="explore-description">{{ destination.description }}</p>
+        <div class="tags-row">
+          <span class="tag">🏖️ Tourism</span>
+          <span class="tag">📸 Photography</span>
+          <span class="tag">🍽️ Food</span>
+          <span class="tag">🎭 Culture</span>
+        </div>
+      </div>
+
+      <!-- Must Visit & Hotels -->
+      <div class="grid-2col">
+        <div class="glass-card list-card">
+          <div class="card-title-row">
+            <span class="card-icon">🗺️</span>
+            <h2 class="section-title">Must Visit Places</h2>
+          </div>
+          <ul class="explore-list">
+            <li><span class="list-num">01</span> Ancient Temples & Shrines</li>
+            <li><span class="list-num">02</span> Scenic Beaches & Coastlines</li>
+            <li><span class="list-num">03</span> Famous Local Markets</li>
+            <li><span class="list-num">04</span> Historical Monuments</li>
+          </ul>
+        </div>
+        <div class="glass-card list-card">
+          <div class="card-title-row">
+            <span class="card-icon">🏨</span>
+            <h2 class="section-title">Top Hotels</h2>
+          </div>
+          <ul class="explore-list">
+            <li><span class="list-num">01</span> Grand Paradise Resort</li>
+            <li><span class="list-num">02</span> Ocean View Boutique</li>
+            <li><span class="list-num">03</span> Mountain Retreat Lodge</li>
+            <li><span class="list-num">04</span> Royal Heritage Palace</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Highlights -->
+      <div class="glass-card highlights-card">
+        <div class="card-title-row">
+          <span class="card-icon">✨</span>
+          <h2 class="section-title">Trip Highlights</h2>
+        </div>
+        <div class="highlights-grid">
+          <div class="highlight-item">
+            <span class="highlight-icon">🌅</span>
+            <span>Sunrise Views</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">🍜</span>
+            <span>Local Cuisine</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">🚗</span>
+            <span>Transport Included</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">🎒</span>
+            <span>Guided Tours</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">📷</span>
+            <span>Photo Spots</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">🏊</span>
+            <span>Adventure Sports</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar-column">
+
+      <!-- Book Now Card -->
+      <div class="glass-card action-card">
+        <div class="action-top">
+          <h3>Ready to Explore?</h3>
+          <p>Book your complete travel package today and enjoy exclusive discounts.</p>
+        </div>
+        <div class="price-summary">
+          <div class="price-row-sm">
+            <span>Base Price</span>
+            <span>{{ currencyService.getCurrencySymbol(destination.category) }}{{ currencyService.convertPrice(destination.price, destination.category) }}</span>
+          </div>
+          <div class="price-row-sm highlight-row">
+            <span>🎉 Discount</span>
+            <span class="discount">-10%</span>
+          </div>
+        </div>
+        <button class="book-btn" (click)="goToBooking()">
+          <span>Book Now</span>
+          <span class="arrow">→</span>
+        </button>
+        <p class="secure-note">🔒 Secure & Instant Confirmation</p>
+      </div>
+
+      <!-- Map Card -->
       <div class="glass-card map-card">
-        <h2 class="section-title small-title">Location Map</h2>
+        <div class="card-title-row">
+          <span class="card-icon">📍</span>
+          <h2 class="section-title small-title">Location</h2>
+        </div>
         <div class="map-wrapper">
           <iframe
             width="100%"
@@ -64,8 +190,41 @@
             [src]="mapUrl">
           </iframe>
         </div>
+        <p class="coords-text">📌 {{ destination.lat }}, {{ destination.lng }}</p>
       </div>
-    </div>
 
+      <!-- Quick Info -->
+      <div class="glass-card quick-info-card">
+        <div class="card-title-row">
+          <span class="card-icon">ℹ️</span>
+          <h2 class="section-title small-title">Quick Info</h2>
+        </div>
+        <div class="info-list">
+          <div class="info-row">
+            <span class="info-label">🌡️ Best Season</span>
+            <span class="info-value">Oct – Mar</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">🗣️ Language</span>
+            <span class="info-value">{{ destination.category === 'india' ? 'Hindi / Local' : 'Local Language' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">💳 Currency</span>
+            <span class="info-value">{{ destination.category === 'india' ? '₹ INR' : 'Foreign Currency' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">⏱️ Ideal Duration</span>
+            <span class="info-value">3 – 7 Days</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
+</div>
+
+<!-- Not Found -->
+<div class="not-found" *ngIf="!destination">
+  <h2>😕 Destination not found</h2>
+  <p>Please go back and select a valid destination.</p>
 </div>

@@ -1,29 +1,378 @@
-<div class="booking-page" *ngIf="destination">
+<div class="bk-page" *ngIf="destination; else notFound">
 
-  <h1>🧾 Book Your Trip</h1>
-
-  <div class="booking-card">
-
-    <img [src]="destination.image" />
-
-    <h2>{{ destination.name }}</h2>
-
-    <p class="price">
-      {{ currencyService.getCurrencySymbol(destination.category) }}
-      {{ currencyService.convertPrice(destination.price, destination.category) }}
-      / person
-    </p>
-
-    <input type="text" [(ngModel)]="name" placeholder="Your Name" />
-
-    <input type="date" [(ngModel)]="date" />
-
-    <input type="number" [(ngModel)]="people" min="1" />
-
-    <button (click)="confirmBooking()">
-      Confirm Booking ✅
-    </button>
-
+  <!--  TOAST  -->
+  <div class="toast" [class.toast-show]="showToast">
+    <span class="toast-icon">🎉</span>
+    <div class="toast-text">
+      <strong>Booking Confirmed!</strong>
+      <span>Redirecting to My Bookings...</span>
+    </div>
+    <div class="toast-progress"></div>
   </div>
 
+  <!--   CONFIRM MODAL   -->
+  <div class="modal-backdrop" *ngIf="showModal" (click)="cancelModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-icon">✈️</div>
+      <h3>Confirm Your Booking</h3>
+      <p>You're about to book a trip to <strong>{{ destination.name }}</strong>.</p>
+
+      <div class="modal-summary">
+        <div class="modal-row">
+          <span>👤 Traveller</span>
+          <span>{{ f['name'].value }}</span>
+        </div>
+        <div class="modal-row">
+          <span>📅 Date</span>
+          <span>{{ f['date'].value }}</span>
+        </div>
+        <div class="modal-row">
+          <span>👥 People</span>
+          <span>{{ people }}</span>
+        </div>
+        <div class="modal-row">
+          <span>🌙 Nights</span>
+          <span>{{ days }}</span>
+        </div>
+        <div class="modal-row">
+          <span>🏨 Room</span>
+          <span>{{ roomType }}</span>
+        </div>
+        <div class="modal-row total">
+          <span>💰 Total</span>
+          <span>{{ currencyService.getCurrencySymbol(destination.category) }}{{ totalPrice | number }}</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-cancel" (click)="cancelModal()">Go Back</button>
+        <button class="modal-confirm" (click)="proceedBooking()">
+          Yes, Confirm! ✅
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!--   HERO   -->
+  <div class="bk-hero" [style.backgroundImage]="'url(' + destination.image + ')'">
+    <div class="hero-overlay">
+      <div class="breadcrumb">
+        <span routerLink="/destinations" class="bc-link">Destinations</span>
+        <span class="bc-sep">›</span>
+        <span routerLink="/explore/{{destination.id}}" class="bc-link">{{ destination.name }}</span>
+        <span class="bc-sep">›</span>
+        <span class="bc-active">Book</span>
+      </div>
+      <h1>Book Your Trip to <span class="hero-dest">{{ destination.name }}</span></h1>
+      <p>Complete the form below to secure your adventure</p>
+      <div class="hero-chips">
+        <span class="chip">✈️ Instant Confirmation</span>
+        <span class="chip">🔒 Secure Booking</span>
+        <span class="chip">💳 No Hidden Fees</span>
+      </div>
+    </div>
+  </div>
+
+  <!--   PROGRESS BAR   -->
+  <div class="progress-wrap">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" [style.width.%]="formProgress"></div>
+    </div>
+    <span class="progress-label">{{ formProgress }}% complete</span>
+  </div>
+
+  <!--   MAIN LAYOUT   -->
+  <div class="bk-container">
+
+    <!-- ── LEFT: FORM ── -->
+    <form class="bk-form" [formGroup]="bookingForm" (ngSubmit)="confirmBooking()">
+
+      <!-- STEP 1: Traveller -->
+      <div class="form-card">
+        <div class="step-header">
+          <div class="step-badge">1</div>
+          <div>
+            <h3>Traveller Details</h3>
+            <p>Tell us who's going on this trip</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field full">
+            <label>
+              <span class="field-icon">👤</span> Full Name
+              <span class="req">*</span>
+            </label>
+            <input type="text" formControlName="name" placeholder="Enter your full name"
+              [class.is-invalid]="f['name'].invalid && f['name'].touched"
+              [class.is-valid]="f['name'].valid && f['name'].touched" />
+            <div class="err" *ngIf="f['name'].touched && f['name'].errors?.['required']">Name is required.</div>
+            <div class="err" *ngIf="f['name'].touched && f['name'].errors?.['minlength']">Minimum 3 characters required.</div>
+          </div>
+
+          <div class="field">
+            <label>
+              <span class="field-icon">📧</span> Email Address
+              <span class="req">*</span>
+            </label>
+            <input type="email" formControlName="email" placeholder="you@example.com"
+              [class.is-invalid]="f['email'].invalid && f['email'].touched"
+              [class.is-valid]="f['email'].valid && f['email'].touched" />
+            <div class="err" *ngIf="f['email'].touched && f['email'].errors?.['required']">Email is required.</div>
+            <div class="err" *ngIf="f['email'].touched && f['email'].errors?.['email']">Enter a valid email address.</div>
+          </div>
+
+          <div class="field">
+            <label>
+              <span class="field-icon">📱</span> Phone Number
+              <span class="req">*</span>
+            </label>
+            <input type="tel" formControlName="phone" placeholder="10-digit mobile number"
+              [class.is-invalid]="f['phone'].invalid && f['phone'].touched"
+              [class.is-valid]="f['phone'].valid && f['phone'].touched" />
+            <div class="err" *ngIf="f['phone'].touched && f['phone'].errors?.['required']">Phone number is required.</div>
+            <div class="err" *ngIf="f['phone'].touched && f['phone'].errors?.['pattern']">Enter a valid 10-digit number.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Travel Details -->
+      <div class="form-card">
+        <div class="step-header">
+          <div class="step-badge">2</div>
+          <div>
+            <h3>Travel Details</h3>
+            <p>When are you planning to travel?</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field full">
+            <label>
+              <span class="field-icon">📅</span> Travel Date
+              <span class="req">*</span>
+            </label>
+            <input type="date" formControlName="date" [min]="minDate"
+              [class.is-invalid]="f['date'].invalid && f['date'].touched"
+              [class.is-valid]="f['date'].valid && f['date'].touched" />
+            <div class="err" *ngIf="f['date'].touched && f['date'].errors?.['required']">Travel date is required.</div>
+          </div>
+
+          <div class="field">
+            <label>
+              <span class="field-icon">👥</span> No. of People
+              <span class="req">*</span>
+            </label>
+            <div class="counter-wrap">
+              <button type="button" class="counter-btn" (click)="bookingForm.patchValue({people: people > 1 ? people - 1 : 1})">−</button>
+              <input type="number" formControlName="people" min="1" max="20"
+                [class.is-invalid]="f['people'].invalid && f['people'].touched" />
+              <button type="button" class="counter-btn" (click)="bookingForm.patchValue({people: people + 1})">+</button>
+            </div>
+            <div class="err" *ngIf="f['people'].touched && f['people'].errors?.['min']">At least 1 person required.</div>
+          </div>
+
+          <div class="field">
+            <label>
+              <span class="field-icon">🌙</span> No. of Nights
+              <span class="req">*</span>
+            </label>
+            <div class="counter-wrap">
+              <button type="button" class="counter-btn" (click)="bookingForm.patchValue({days: days > 1 ? days - 1 : 1})">−</button>
+              <input type="number" formControlName="days" min="1" max="30"
+                [class.is-invalid]="f['days'].invalid && f['days'].touched" />
+              <button type="button" class="counter-btn" (click)="bookingForm.patchValue({days: days + 1})">+</button>
+            </div>
+            <div class="err" *ngIf="f['days'].touched && f['days'].errors?.['min']">At least 1 night required.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Room Type -->
+      <div class="form-card">
+        <div class="step-header">
+          <div class="step-badge">3</div>
+          <div>
+            <h3>Room Preference</h3>
+            <p>Choose your accommodation type</p>
+          </div>
+        </div>
+
+        <div class="room-cards">
+          <div class="room-card" [class.selected]="roomType === 'Standard'" (click)="selectRoom('Standard')">
+            <div class="room-icon">🛏️</div>
+            <div class="room-info">
+              <strong>Standard</strong>
+              <span>Comfortable & affordable</span>
+            </div>
+            <div class="room-price">Base rate</div>
+            <div class="room-check" *ngIf="roomType === 'Standard'">✓</div>
+          </div>
+
+          <div class="room-card" [class.selected]="roomType === 'Deluxe'" (click)="selectRoom('Deluxe')">
+            <div class="room-icon">🛎️</div>
+            <div class="room-info">
+              <strong>Deluxe</strong>
+              <span>Premium amenities</span>
+            </div>
+            <div class="room-price">+25%</div>
+            <div class="room-check" *ngIf="roomType === 'Deluxe'">✓</div>
+          </div>
+
+          <div class="room-card luxury" [class.selected]="roomType === 'Luxury'" (click)="selectRoom('Luxury')">
+            <div class="room-icon">👑</div>
+            <div class="room-info">
+              <strong>Luxury Suite</strong>
+              <span>World-class experience</span>
+            </div>
+            <div class="room-price">+60%</div>
+            <div class="room-check" *ngIf="roomType === 'Luxury'">✓</div>
+          </div>
+        </div>
+        <div class="err mt-4" *ngIf="f['roomType'].touched && f['roomType'].errors?.['required']">Please select a room type.</div>
+      </div>
+
+      <!-- STEP 4: Special Requests -->
+      <div class="form-card">
+        <div class="step-header">
+          <div class="step-badge">4</div>
+          <div>
+            <h3>Special Requests</h3>
+            <p>Anything we should know? (optional)</p>
+          </div>
+        </div>
+        <textarea formControlName="notes" placeholder="e.g. vegetarian meals, early check-in, anniversary decoration..."></textarea>
+      </div>
+
+      <!-- TRUST BADGES -->
+      <div class="trust-strip">
+        <div class="trust-item">
+          <span>🔒</span>
+          <span>SSL Secured</span>
+        </div>
+        <div class="trust-item">
+          <span>✅</span>
+          <span>Instant Confirmation</span>
+        </div>
+        <div class="trust-item">
+          <span>💰</span>
+          <span>Best Price Guarantee</span>
+        </div>
+        <div class="trust-item">
+          <span>🔄</span>
+          <span>Free Cancellation*</span>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <button type="submit" class="confirm-btn" [disabled]="bookingForm.invalid || isSubmitting">
+        <ng-container *ngIf="!isSubmitting">
+          <span>Confirm Booking</span>
+          <span class="btn-arrow">→</span>
+        </ng-container>
+        <ng-container *ngIf="isSubmitting">
+          <span class="spinner"></span>
+          <span>Processing your booking...</span>
+        </ng-container>
+      </button>
+
+    </form>
+
+    <!--   RIGHT: SUMMARY    -->
+    <div class="summary-panel">
+
+      <!-- Destination Card -->
+      <div class="summary-card">
+        <div class="summary-img-wrap">
+          <img [src]="destination.image" [alt]="destination.name" />
+          <div class="summary-img-overlay">
+            <span class="dest-badge">
+              {{ (destination.category === 'india' || destination.category === 'domestic') ? '🇮🇳 India' : '🌍 International' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="summary-body">
+          <h2>{{ destination.name }}</h2>
+          <p class="summary-desc">{{ destination.description }}</p>
+
+          <div class="summary-divider"></div>
+
+          <!-- Price Breakdown -->
+          <div class="breakdown-title">Price Breakdown</div>
+          <div class="breakdown-table">
+            <div class="breakdown-row">
+              <span>Base price / person / night</span>
+              <span>{{ currencyService.getCurrencySymbol(destination.category) }}{{ basePrice | number }}</span>
+            </div>
+            <div class="breakdown-row" *ngIf="roomSurcharge > 0">
+              <span>{{ roomType }} surcharge</span>
+              <span>+ {{ currencyService.getCurrencySymbol(destination.category) }}{{ roomSurcharge | number }}</span>
+            </div>
+            <div class="breakdown-row">
+              <span>{{ people }} {{ people === 1 ? 'person' : 'people' }} × {{ days }} {{ days === 1 ? 'night' : 'nights' }}</span>
+              <span>{{ currencyService.getCurrencySymbol(destination.category) }}{{ subtotal | number }}</span>
+            </div>
+            <div class="breakdown-row tax">
+              <span>Taxes & fees (5%)</span>
+              <span>+ {{ currencyService.getCurrencySymbol(destination.category) }}{{ taxes | number }}</span>
+            </div>
+          </div>
+
+          <div class="total-row">
+            <span>Total</span>
+            <span class="total-val">
+              {{ currencyService.getCurrencySymbol(destination.category) }}{{ totalPrice | number }}
+            </span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <!-- Trip Summary Chips -->
+          <div class="trip-chips">
+            <div class="trip-chip">
+              <span class="chip-icon">👥</span>
+              <div>
+                <span class="chip-val">{{ people }}</span>
+                <span class="chip-lbl">{{ people === 1 ? 'Person' : 'People' }}</span>
+              </div>
+            </div>
+            <div class="trip-chip">
+              <span class="chip-icon">🌙</span>
+              <div>
+                <span class="chip-val">{{ days }}</span>
+                <span class="chip-lbl">{{ days === 1 ? 'Night' : 'Nights' }}</span>
+              </div>
+            </div>
+            <div class="trip-chip">
+              <span class="chip-icon">🏨</span>
+              <div>
+                <span class="chip-val">{{ roomType || '—' }}</span>
+                <span class="chip-lbl">Room</span>
+              </div>
+            </div>
+            <div class="trip-chip">
+              <span class="chip-icon">📅</span>
+              <div>
+                <span class="chip-val">{{ f['date'].value || '—' }}</span>
+                <span class="chip-lbl">Date</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
+
+<!-- NOT FOUND -->
+<ng-template #notFound>
+  <div class="not-found">
+    <div class="nf-icon">🗺️</div>
+    <h2>Destination Not Found</h2>
+    <p>The destination you're looking for doesn't exist or has been removed.</p>
+    <button routerLink="/destinations" class="nf-btn">Browse Destinations</button>
+  </div>
+</ng-template>

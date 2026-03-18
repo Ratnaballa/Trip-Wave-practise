@@ -1,45 +1,68 @@
 <div class="wishlist-page">
 
-  <h1>❤️ Your Wishlist</h1>
-
-  <!-- Empty state -->
-  <div class="empty" *ngIf="wishlistItems.length === 0">
-    <p>No favorites yet 🥺</p>
-    <a routerLink="/packages">Explore Packages</a>
+  <!-- Header -->
+  <div class="wishlist-header">
+    <div class="header-left">
+      <h1>❤️ Your Wishlist</h1>
+      <p class="subtitle">{{ wishlistItems.length }} {{ wishlistItems.length === 1 ? 'destination' : 'destinations' }} saved</p>
+    </div>
+    <a routerLink="/destinations" class="explore-btn">🌍 Explore More</a>
   </div>
 
-  <!-- Cards -->
-  <div class="grid" *ngIf="wishlistItems.length > 0">
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="wishlistItems.length === 0">
+    <div class="empty-icon">🗺️</div>
+    <h2>No Favorites Yet</h2>
+    <p>Start exploring destinations and save your favorites here!</p>
+    <a routerLink="/destinations" class="empty-cta">Explore Destinations →</a>
+  </div>
 
+  <!-- Cards Grid -->
+  <div class="grid" *ngIf="wishlistItems.length > 0">
     <div class="card" *ngFor="let item of wishlistItems">
 
+      <!-- Image -->
       <div class="img-wrapper">
-        <img [src]="item.image" />
+        <img [src]="item.image" [alt]="item.name" />
+        <div class="img-overlay"></div>
 
-        <!-- remove button -->
-        <span class="remove" (click)="remove(item.id)">✖</span>
+        <!-- Category Badge -->
+        <span class="category-badge">
+          {{ item.category === 'india' ? '🇮🇳 India' : '🌍 International' }}
+        </span>
+
+        <!-- Remove Button -->
+        <button class="remove-btn" (click)="remove(item.id)" title="Remove from wishlist">
+          ✕
+        </button>
+
+        <!-- Rating -->
+        <div class="rating-badge">
+          ★ {{ item.rating }}/5
+        </div>
       </div>
 
+      <!-- Card Body -->
       <div class="card-body">
-
         <h2>{{ item.name }}</h2>
-
         <p class="desc">{{ item.description }}</p>
 
-        <div class="meta">
-          <span>⭐ {{ item.rating }}</span>
-          <span>{{ item.category }}</span>
+        <div class="card-footer">
+          <div class="price-block">
+            <span class="price-label">From</span>
+            <span class="price">
+              {{ currencyService.getCurrencySymbol(item.category) }}{{ currencyService.convertPrice(item.price, item.category) }}
+            </span>
+            <span class="per-person">/ person</span>
+          </div>
+          <div class="action-btns">
+            <a [routerLink]="['/explore', item.id]" class="explore-link">Explore →</a>
+            <a [routerLink]="['/bookings', item.id]" class="book-link">Book</a>
+          </div>
         </div>
-
-        <div class="price">
-          {{ currencyService.getCurrencySymbol(item.category) }}
-          {{ currencyService.convertPrice(item.price, item.category) }}
-        </div>
-
       </div>
 
     </div>
-
   </div>
 
 </div>

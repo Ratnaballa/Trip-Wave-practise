@@ -40,7 +40,7 @@
   border-radius: 4px;
 }
 
-/* === HERO SECTION === */
+/*  HERO SECTION */
 .hero {
   height: 65vh;
   position: relative;
@@ -91,7 +91,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* === FILTERS === */
+/*   FILTERS   */
 .filter-buttons {
   display: flex;
   justify-content: center;
@@ -182,7 +182,7 @@
   box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
 }
 
-/* === CARD GRID === */
+/*   CARD GRID   */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -291,7 +291,7 @@
 }
 
 .rating-badge {
-  z-index: 15; /* Ensure badge floats above overlay */
+  z-index: 15; 
 }
 
 .card-content {
@@ -373,7 +373,7 @@
   transform: translateX(4px);
 }
 
-/* === LOAD MORE & EMPTY STATE === */
+/* LOAD MORE & EMPTY STATE  */
 .load-more-container {
   display: flex;
   justify-content: center;
@@ -407,7 +407,7 @@
   font-weight: 500;
 }
 
-/* === RESPONSIVE === */
+/*   RESPONSIVE   */
 @media (max-width: 1024px) {
   .hero-content h1 { font-size: 46px; }
   .filter-bar { padding: 15px; gap: 10px; }

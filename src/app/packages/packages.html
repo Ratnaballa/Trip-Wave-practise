@@ -1,63 +1,156 @@
-<div class="packages-page">
+<div class="pkg-page">
 
-  <!-- 🔍 Top Bar -->
-  <div class="top-bar">
-    <input
-      type="text"
-      placeholder="Search destinations..."
-      [(ngModel)]="searchText"
-      (input)="applyFilters()"
-    />
-
-    <select [(ngModel)]="selectedCategory" (change)="applyFilters()">
-      <option value="">All</option>
-      <option value="domestic">India</option>
-      <option value="international">International</option>
-    </select>
-
-    <select [(ngModel)]="sortOption" (change)="applyFilters()">
-      <option value="">Sort</option>
-      <option value="priceLow">Price Low → High</option>
-      <option value="priceHigh">Price High → Low</option>
-      <option value="rating">Top Rated</option>
-    </select>
+  <!-- ═══ HERO ═══ -->
+  <div class="pkg-hero">
+    <div class="hero-overlay">
+      <div class="hero-badge">✈️ Handpicked Experiences</div>
+      <h1>Find Your Perfect <span class="highlight">Travel Package</span></h1>
+      <p>Explore {{ stats.total }}+ curated destinations across India and the world</p>
+      <div class="hero-search">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          placeholder="Search destinations, experiences..."
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+        />
+      </div>
+    </div>
   </div>
 
-  <!-- 🧾 Grid -->
-  <div class="packages-grid">
-    <div class="card" *ngFor="let pkg of filteredPackages">
+  <!-- ═══ STATS BAR ═══ -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num">{{ stats.total }}</span>
+      <span class="stat-label">Total Packages</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">{{ stats.india }}</span>
+      <span class="stat-label">🇮🇳 India</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">{{ stats.international }}</span>
+      <span class="stat-label">🌍 International</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num">{{ stats.wishlisted }}</span>
+      <span class="stat-label">❤️ Wishlisted</span>
+    </div>
+  </div>
 
-      <div class="img-wrapper">
-        <img [src]="pkg.image" />
+  <!-- ═══ FILTER BAR ═══ -->
+  <div class="filter-section">
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label>Category</label>
+        <select [(ngModel)]="selectedCategory" (change)="applyFilters()">
+          <option value="">🌐 All Destinations</option>
+          <option value="india">🇮🇳 India</option>
+          <option value="international">🌍 International</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Sort By</label>
+        <select [(ngModel)]="sortOption" (change)="applyFilters()">
+          <option value="">Default</option>
+          <option value="priceLow">💰 Price: Low → High</option>
+          <option value="priceHigh">💎 Price: High → Low</option>
+          <option value="rating">⭐ Top Rated</option>
+          <option value="name">🔤 Name A–Z</option>
+        </select>
+      </div>
+      <button class="reset-btn" (click)="resetFilters()">↺ Reset</button>
+    </div>
+    <div class="result-count">
+      Showing <strong>{{ filteredPackages.length }}</strong> of {{ stats.total }} packages
+    </div>
+  </div>
 
-        <!-- 🏷 badge -->
-        <span class="badge" *ngIf="pkg.rating >= 4.5">🔥 Popular</span>
+  <!-- ═══ GRID ═══ -->
+  <div class="pkg-grid" *ngIf="filteredPackages.length > 0; else emptyState">
+    <div class="pkg-card" *ngFor="let pkg of filteredPackages">
 
-        <!-- ❤️ wishlist -->
-        <span class="wishlist" (click)="wishlistService.toggle(pkg.id)">
-  {{ wishlistService.isWishlisted(pkg.id) ? '❤️' : '🤍' }}
-</span>
+      <!-- Image -->
+      <div class="card-img-wrap">
+        <img [src]="pkg.image" [alt]="pkg.name" loading="lazy" />
+        <div class="img-gradient"></div>
+
+        <!-- Badges -->
+        <div class="card-badges">
+          <span class="cat-badge" [class.india]="pkg.category === 'india' || pkg.category === 'domestic'">
+            {{ (pkg.category === 'india' || pkg.category === 'domestic') ? '🇮🇳 India' : '🌍 Intl' }}
+          </span>
+          <span class="hot-badge" *ngIf="pkg.rating >= 4.5">🔥 Popular</span>
+        </div>
+
+        <!-- Wishlist -->
+        <button class="wish-btn" (click)="wishlistService.toggle(pkg.id)" [title]="wishlistService.isWishlisted(pkg.id) ? 'Remove from wishlist' : 'Add to wishlist'">
+          {{ wishlistService.isWishlisted(pkg.id) ? '❤️' : '🤍' }}
+        </button>
       </div>
 
+      <!-- Body -->
       <div class="card-body">
-        <h2>{{ pkg.name }}</h2>
+        <h3 class="card-title">{{ pkg.name }}</h3>
+        <p class="card-desc">{{ pkg.description }}</p>
 
-        <p class="desc">{{ pkg.description }}</p>
-
-        <div class="meta">
-          <span>⭐ {{ pkg.rating }}</span>
-          <span>{{ pkg.category }}</span>
+        <!-- Rating -->
+        <div class="rating-row">
+          <div class="stars-track">
+            <div class="stars-fill" [style.width.%]="getRatingWidth(pkg.rating)"></div>
+          </div>
+          <span class="rating-val">{{ pkg.rating }}/5</span>
         </div>
 
-        <div class="price">
-          {{ currencyService.getCurrencySymbol(pkg.category) }}
-          {{ currencyService.convertPrice(pkg.price, pkg.category) }}
-          <span>/person</span>
+        <!-- Price -->
+        <div class="price-row">
+          <div class="price-block">
+            <span class="price-label">Starting from</span>
+            <span class="price-amount">
+              {{ currencyService.getCurrencySymbol(pkg.category) }}{{ currencyService.convertPrice(pkg.price, pkg.category) | number }}
+            </span>
+            <span class="price-per">/ person</span>
+          </div>
         </div>
 
-        <button (click)="viewDetails(pkg.id)">View Details →</button>
+        <!-- Actions -->
+        <div class="card-actions">
+          <button class="btn-explore" (click)="viewDetails(pkg.id)">
+            <span>Explore</span>
+            <span class="btn-arrow">→</span>
+          </button>
+          <button class="btn-book" (click)="bookNow(pkg.id)">
+            Book Now
+          </button>
+        </div>
       </div>
 
     </div>
   </div>
+
+  <!-- ═══ EMPTY STATE ═══ -->
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <div class="empty-icon">🗺️</div>
+      <h3>No packages found</h3>
+      <p>Try adjusting your search or filters to discover more destinations.</p>
+      <button class="reset-btn-lg" (click)="resetFilters()">Clear Filters</button>
+    </div>
+  </ng-template>
+
+  <!-- ═══ FOOTER CTA ═══ -->
+  <div class="footer-cta">
+    <div class="cta-content">
+      <h2>Can't find what you're looking for?</h2>
+      <p>Browse all destinations or build your own custom trip</p>
+      <div class="cta-actions">
+        <button routerLink="/destinations" class="cta-btn-primary">Browse All Destinations</button>
+        <button routerLink="/wishlist" class="cta-btn-outline">View Wishlist ❤️</button>
+      </div>
+    </div>
+  </div>
+
 </div>

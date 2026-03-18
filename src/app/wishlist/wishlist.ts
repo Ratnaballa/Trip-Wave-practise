@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { DESTINATIONS } from '../destinations-data';
 import { Currency } from '../currency';
 import { WishlistService } from '../services/wishlist';
+import { RouterLink } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 @Component({
   selector: 'app-wishlist',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './wishlist.html',
   styleUrls: ['./wishlist.css']
 })

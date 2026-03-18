@@ -29,7 +29,7 @@ export class Destinations implements OnInit {
   searchText = '';
   userLat: number = 0;
   userLng: number = 0;
-  maxDistance = 5000;
+  maxDistance = 20000;
 
   constructor(public currencyService: Currency) {}
   resetFilters() {

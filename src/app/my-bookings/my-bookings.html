@@ -1,0 +1,150 @@
+<div class="mb-page">
+
+  <!-- CANCEL TOAST -->
+  <div class="toast-cancel" [class.show]="showCancelToast">
+    <span>🗑️</span>
+    <span>Booking cancelled successfully.</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="mb-hero">
+    <div class="mb-hero-overlay">
+      <div class="mb-hero-badge">🧳 Your Travel History</div>
+      <h1>My Bookings</h1>
+      <p>Track, manage and review all your confirmed trips</p>
+    </div>
+  </div>
+
+  <!-- STATS BAR -->
+  <div class="mb-stats" *ngIf="bookings.length > 0">
+    <div class="stat">
+      <span class="stat-n">{{ bookings.length }}</span>
+      <span class="stat-l">Total Trips</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <span class="stat-n">{{ bookings.length - (bookings | completedCount) }}</span>
+      <span class="stat-l">✈️ Upcoming</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <span class="stat-n">{{ bookings | completedCount }}</span>
+      <span class="stat-l">✅ Completed</span>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="mb-container">
+
+    <!-- BOOKING CARDS -->
+    <div class="mb-grid" *ngIf="bookings.length > 0; else emptyState">
+      <div class="bk-card" *ngFor="let b of bookings" [class.cancelling]="cancellingId === b.id">
+
+        <!-- Image -->
+        <div class="card-img">
+          <img [src]="b.image" [alt]="b.destination" loading="lazy" />
+          <div class="card-img-overlay"></div>
+          <span class="cat-pill">
+            {{ b.category === 'india' || b.category === 'domestic' ? '🇮🇳 India' : '🌍 International' }}
+          </span>
+          <span class="status-pill" [ngClass]="getStatusLabel(b.date).cls">
+            {{ getStatusLabel(b.date).label }}
+          </span>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <div class="card-top">
+            <h3>{{ b.destination }}</h3>
+            <span class="booking-id">#{{ b.id.toString().slice(-6) }}</span>
+          </div>
+
+          <div class="card-meta-grid">
+            <div class="meta-cell">
+              <span class="meta-icon">👤</span>
+              <div>
+                <span class="meta-val">{{ b.name }}</span>
+                <span class="meta-lbl">Traveller</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">📅</span>
+              <div>
+                <span class="meta-val">{{ b.date }}</span>
+                <span class="meta-lbl">Travel Date</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">👥</span>
+              <div>
+                <span class="meta-val">{{ b.people }} {{ b.people === 1 ? 'Person' : 'People' }}</span>
+                <span class="meta-lbl">Travellers</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">🌙</span>
+              <div>
+                <span class="meta-val">{{ b.days }} {{ b.days === 1 ? 'Night' : 'Nights' }}</span>
+                <span class="meta-lbl">Duration</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">🏨</span>
+              <div>
+                <span class="meta-val">{{ b.roomType }}</span>
+                <span class="meta-lbl">Room Type</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">📧</span>
+              <div>
+                <span class="meta-val">{{ b.email }}</span>
+                <span class="meta-lbl">Email</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="card-total">
+            <span class="total-label">Total Paid</span>
+            <span class="total-amount">
+              {{ currencyService.getCurrencySymbol(b.category) }}{{ b.total | number }}
+            </span>
+          </div>
+
+          <!-- Actions -->
+          <div class="card-actions">
+            <button class="btn-explore" [routerLink]="['/explore', b.destinationId]">View Destination</button>
+            <button class="btn-cancel"
+              (click)="cancelBooking(b.id)"
+              [disabled]="cancellingId === b.id">
+              <span *ngIf="cancellingId !== b.id">Cancel Booking</span>
+              <span *ngIf="cancellingId === b.id" class="mini-spinner"></span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <div class="empty-icon">🧳</div>
+        <h2>No Bookings Yet</h2>
+        <p>You haven't booked any trips yet. Start exploring and plan your next adventure!</p>
+        <button class="btn-explore-now" (click)="goBook()">
+          Explore Destinations ✈️
+        </button>
+      </div>
+    </ng-template>
+
+  </div>
+
+  <!-- FOOTER CTA -->
+  <div class="mb-cta" *ngIf="bookings.length > 0">
+    <h3>Ready for your next adventure?</h3>
+    <button routerLink="/destinations" class="cta-btn">Browse Destinations ✈️</button>
+  </div>
+
+</div>
