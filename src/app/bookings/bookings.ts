@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { DESTINATIONS } from '../destinations-data';
 import { Currency } from '../currency';
 import { BookingService } from '../services/booking.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-booking',
@@ -53,7 +54,8 @@ export class Booking implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     public currencyService: Currency,
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
@@ -86,13 +88,13 @@ export class Booking implements OnInit {
     this.showModal = true;
   }
 
-  // Step 2: modal confirmed → save + toast + redirect
+  // Step 2: modal confirmed → store pending booking → go to payment
   proceedBooking() {
     this.showModal = false;
     this.isSubmitting = true;
     setTimeout(() => {
       const v = this.bookingForm.value;
-      this.bookingService.save({
+      const pending = {
         id: Date.now(),
         destinationId: this.destination.id,
         destination: this.destination.name,
@@ -100,12 +102,18 @@ export class Booking implements OnInit {
         price: this.destination.price,
         category: this.destination.category,
         total: this.totalPrice,
+        basePrice: this.basePrice,
+        roomSurcharge: this.roomSurcharge,
+        subtotal: this.subtotal,
+        taxes: this.taxes,
+        userEmail: this.auth.getUserEmail(),
         ...v
-      });
+      };
+      console.log('[Booking] pendingBooking created for user:', pending.userEmail);
+      localStorage.setItem('pendingBooking', JSON.stringify(pending));
       this.isSubmitting = false;
-      this.showToast = true;
-      setTimeout(() => this.router.navigate(['/my-bookings']), 2000);
-    }, 1400);
+      this.router.navigate(['/payment']);
+    }, 800);
   }
 
   cancelModal() { this.showModal = false; }

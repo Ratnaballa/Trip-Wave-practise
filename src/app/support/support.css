@@ -1,0 +1,40 @@
+@import '../profile/shared-page.css';
+
+.faq-section { margin-bottom: 40px; }
+
+.faq-title { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 20px; }
+
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+
+.faq-item {
+  background: white; border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  overflow: hidden; border: 1.5px solid #f1f5f9;
+  transition: border-color 0.2s;
+}
+.faq-item.open { border-color: #0ea5e9; }
+
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 20px; cursor: pointer; font-size: 15px;
+  font-weight: 700; color: #0f172a; gap: 12px;
+  transition: background 0.2s;
+}
+.faq-q:hover { background: #f8fafc; }
+
+.faq-arrow { font-size: 12px; color: #0ea5e9; flex-shrink: 0; }
+
+.faq-a {
+  padding: 0 20px 18px; font-size: 14px; color: #475569;
+  line-height: 1.65; border-top: 1px solid #f1f5f9;
+  padding-top: 14px;
+}
+
+.support-cta {
+  background: linear-gradient(135deg, #0a1f44, #0ea5e9);
+  border-radius: 20px; padding: 36px; text-align: center; color: white;
+}
+.support-cta h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.support-cta p  { font-size: 14px; opacity: 0.85; margin-bottom: 20px; }
+.support-cta .btn-primary { background: white; color: #0a1f44; }
+.support-cta .btn-primary:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.2); }

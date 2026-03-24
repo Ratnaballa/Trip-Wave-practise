@@ -1,0 +1,39 @@
+<div class="page-wrapper">
+  <div class="page-hero">
+    <div class="page-hero-overlay">
+      <div class="page-badge">🎁 Exclusive Deals</div>
+      <h1>Special Offers</h1>
+      <p>Handpicked deals to make your next trip more affordable</p>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <div class="offers-grid">
+      <div class="offer-card" *ngFor="let offer of offers">
+        <div class="offer-icon" [style.background]="offer.color + '18'" [style.color]="offer.color">
+          {{ offer.icon }}
+        </div>
+        <div class="offer-body">
+          <h3>{{ offer.title }}</h3>
+          <p>{{ offer.desc }}</p>
+          <div class="offer-meta">
+            <span class="expiry">🗓️ Expires: {{ offer.expiry }}</span>
+          </div>
+          <div class="code-row">
+            <span class="code-box">{{ offer.code }}</span>
+            <button class="copy-btn" (click)="copyCode(offer.code)"
+              [class.copied]="copied === offer.code">
+              {{ copied === offer.code ? '✅ Copied!' : '📋 Copy' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="offers-cta">
+      <h3>Ready to use your offer?</h3>
+      <p>Browse destinations and apply your code at checkout</p>
+      <button routerLink="/destinations" class="btn-primary">Browse Destinations ✈️</button>
+    </div>
+  </div>
+</div>

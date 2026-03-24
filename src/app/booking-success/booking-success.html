@@ -1,0 +1,82 @@
+<div class="success-page" *ngIf="booking">
+
+  <!-- CONFETTI DOTS -->
+  <div class="confetti">
+    <span *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]" class="dot" [attr.data-i]="i"></span>
+  </div>
+
+  <div class="success-container">
+
+    <!-- SUCCESS CARD -->
+    <div class="success-card">
+      <div class="check-wrap">
+        <div class="check-circle">
+          <svg viewBox="0 0 52 52" class="check-svg">
+            <circle class="check-bg" cx="26" cy="26" r="25" fill="none"/>
+            <path class="check-mark" fill="none" d="M14 27 l8 8 l16-16"/>
+          </svg>
+        </div>
+      </div>
+
+      <h1>Booking Confirmed! 🎉</h1>
+      <p class="sub">Your trip to <strong>{{ booking.destination }}</strong> is all set.</p>
+
+      <div class="ref-box">
+        <span class="ref-label">Booking Reference</span>
+        <span class="ref-val">{{ bookingRef }}</span>
+      </div>
+
+      <!-- Destination image strip -->
+      <div class="dest-strip">
+        <img [src]="booking.image" [alt]="booking.destination" />
+        <div class="dest-strip-overlay">
+          <span>{{ booking.destination }}</span>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-cell">
+          <span class="d-icon">👤</span>
+          <span class="d-label">Traveller</span>
+          <span class="d-val">{{ booking.name }}</span>
+        </div>
+        <div class="detail-cell">
+          <span class="d-icon">📅</span>
+          <span class="d-label">Travel Date</span>
+          <span class="d-val">{{ booking.date }}</span>
+        </div>
+        <div class="detail-cell">
+          <span class="d-icon">👥</span>
+          <span class="d-label">Travellers</span>
+          <span class="d-val">{{ booking.people }} {{ booking.people === 1 ? 'Person' : 'People' }}</span>
+        </div>
+        <div class="detail-cell">
+          <span class="d-icon">🌙</span>
+          <span class="d-label">Duration</span>
+          <span class="d-val">{{ booking.days }} {{ booking.days === 1 ? 'Night' : 'Nights' }}</span>
+        </div>
+        <div class="detail-cell">
+          <span class="d-icon">🏨</span>
+          <span class="d-label">Room</span>
+          <span class="d-val">{{ booking.roomType }}</span>
+        </div>
+        <div class="detail-cell highlight">
+          <span class="d-icon">💰</span>
+          <span class="d-label">Total Paid</span>
+          <span class="d-val">{{ currencyService.getCurrencySymbol(booking.category) }}{{ booking.total | number }}</span>
+        </div>
+      </div>
+
+      <p class="email-note">📧 A confirmation has been sent to <strong>{{ booking.email }}</strong></p>
+
+      <!-- Actions -->
+      <div class="success-actions">
+        <button (click)="downloadTicket()" class="btn-ticket">Download Ticket </button>
+        <button routerLink="/my-bookings" class="btn-primary">View My Bookings</button>
+        <button routerLink="/destinations" class="btn-outline">Explore More ✈️</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>

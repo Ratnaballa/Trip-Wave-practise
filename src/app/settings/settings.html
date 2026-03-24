@@ -1,0 +1,234 @@
+<div class="page-wrapper">
+  <div class="page-hero">
+    <div class="page-hero-overlay">
+      <div class="page-badge">⚙️ Preferences</div>
+      <h1>Settings</h1>
+      <p>Customize your TripWave experience</p>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <div class="settings-layout">
+
+      <!-- LEFT: Section Tabs -->
+      <aside class="settings-nav">
+        <div
+          *ngFor="let s of sections"
+          class="settings-nav-item"
+          [class.active]="activeSection === s.id"
+          (click)="activeSection = s.id">
+          <span class="nav-icon">{{ s.icon }}</span>
+          <span>{{ s.label }}</span>
+        </div>
+      </aside>
+
+      <!-- RIGHT: Content -->
+      <div class="settings-content">
+
+        <div class="success-banner" *ngIf="saved">✅ Settings saved successfully!</div>
+
+        <!-- APPEARANCE -->
+        <div *ngIf="activeSection === 'appearance'">
+          <h2 class="section-heading">🎨 Appearance</h2>
+
+          <div class="setting-block">
+            <div class="setting-block-title">Theme</div>
+            <div class="theme-options">
+              <div class="theme-card" [class.active]="themeService.activeTheme() === 'light'" (click)="setTheme('light')">
+                <div class="theme-preview light-preview">
+                  <div class="tp-bar"></div>
+                  <div class="tp-body"></div>
+                </div>
+                <span>☀️ Light</span>
+              </div>
+              <div class="theme-card" [class.active]="themeService.activeTheme() === 'dark'" (click)="setTheme('dark')">
+                <div class="theme-preview dark-preview">
+                  <div class="tp-bar"></div>
+                  <div class="tp-body"></div>
+                </div>
+                <span>🌙 Dark</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <div class="setting-block-title">Font Size</div>
+            <div class="chip-group">
+              <span class="chip active">Default</span>
+              <span class="chip">Large</span>
+              <span class="chip">Extra Large</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div *ngIf="activeSection === 'notifications'">
+          <h2 class="section-heading">🔔 Notifications</h2>
+
+          <div class="setting-block">
+            <div class="setting-block-title">Push Notifications</div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Booking Alerts</strong>
+                <p>Confirmations, reminders & updates</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" [(ngModel)]="bookingAlerts" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Deals & Offers</strong>
+                <p>Flash sales and exclusive discounts</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" [(ngModel)]="dealAlerts" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>SMS Alerts</strong>
+                <p>Receive booking updates via SMS</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" [(ngModel)]="smsAlerts" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <div class="setting-block-title">Email</div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Newsletter</strong>
+                <p>Weekly travel inspiration & tips</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" [(ngModel)]="newsletter" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRIVACY -->
+        <div *ngIf="activeSection === 'privacy'">
+          <h2 class="section-heading">🔒 Privacy & Security</h2>
+
+          <div class="setting-block">
+            <div class="setting-block-title">Profile</div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Public Profile</strong>
+                <p>Let others see your travel activity</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" [(ngModel)]="profileVisible" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Activity Status</strong>
+                <p>Show when you were last active</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" [(ngModel)]="activityStatus" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Data Sharing</strong>
+                <p>Share anonymised data to improve recommendations</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" [(ngModel)]="dataSharing" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <div class="setting-block-title">Account</div>
+            <button class="btn-danger-outline">🗑️ Delete Account</button>
+          </div>
+        </div>
+
+        <!-- TRAVEL PREFERENCES -->
+        <div *ngIf="activeSection === 'travel'">
+          <h2 class="section-heading">✈️ Travel Preferences</h2>
+
+          <div class="setting-block">
+            <div class="setting-block-title">Flight</div>
+            <div class="select-row">
+              <label>Seat Preference</label>
+              <select [(ngModel)]="seatPreference">
+                <option value="window">🪟 Window</option>
+                <option value="aisle">🚶 Aisle</option>
+                <option value="middle">💺 Middle</option>
+              </select>
+            </div>
+            <div class="select-row" style="margin-top:12px">
+              <label>Travel Class</label>
+              <select [(ngModel)]="travelClass">
+                <option value="economy">🪑 Economy</option>
+                <option value="business">💼 Business</option>
+                <option value="first">👑 First Class</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <div class="setting-block-title">Meal Preference</div>
+            <div class="chip-group">
+              <span class="chip" [class.active]="mealPreference==='veg'"     (click)="mealPreference='veg'">🥗 Vegetarian</span>
+              <span class="chip" [class.active]="mealPreference==='nonveg'"  (click)="mealPreference='nonveg'">🍗 Non-Veg</span>
+              <span class="chip" [class.active]="mealPreference==='vegan'"   (click)="mealPreference='vegan'">🌱 Vegan</span>
+              <span class="chip" [class.active]="mealPreference==='jain'"    (click)="mealPreference='jain'">🙏 Jain</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- REGIONAL -->
+        <div *ngIf="activeSection === 'regional'">
+          <h2 class="section-heading">🌍 Regional</h2>
+
+          <div class="setting-block">
+            <div class="select-row">
+              <label>Currency</label>
+              <select [(ngModel)]="currency">
+                <option value="INR">🇮🇳 INR – Indian Rupee</option>
+                <option value="USD">🇺🇸 USD – US Dollar</option>
+                <option value="EUR">🇪🇺 EUR – Euro</option>
+                <option value="GBP">🇬🇧 GBP – British Pound</option>
+                <option value="AED">🇦🇪 AED – UAE Dirham</option>
+              </select>
+            </div>
+            <div class="select-row" style="margin-top:12px">
+              <label>Language</label>
+              <select [(ngModel)]="language">
+                <option value="en">🇬🇧 English</option>
+                <option value="hi">🇮🇳 Hindi</option>
+                <option value="te">🇮🇳 Telugu</option>
+                <option value="ta">🇮🇳 Tamil</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="save-row">
+          <button class="btn-primary" (click)="saveSettings()" [disabled]="saving">
+            <span *ngIf="!saving">Save Changes</span>
+            <span *ngIf="saving">Saving…</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

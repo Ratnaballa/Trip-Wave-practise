@@ -16,7 +16,7 @@
   </div>
 
   <!-- STATS BAR -->
-  <div class="mb-stats" *ngIf="bookings.length > 0">
+  <div class="mb-stats" *ngIf="bookings.length > 0 || cancelledBookings.length > 0">
     <div class="stat">
       <span class="stat-n">{{ bookings.length }}</span>
       <span class="stat-l">Total Trips</span>
@@ -30,6 +30,11 @@
     <div class="stat">
       <span class="stat-n">{{ bookings | completedCount }}</span>
       <span class="stat-l">✅ Completed</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <span class="stat-n cancelled-stat">{{ cancelledBookings.length }}</span>
+      <span class="stat-l">🗑️ Cancelled</span>
     </div>
   </div>
 
@@ -115,6 +120,7 @@
           <!-- Actions -->
           <div class="card-actions">
             <button class="btn-explore" [routerLink]="['/explore', b.destinationId]">View Destination</button>
+            <button class="btn-ticket" (click)="ticketService.download(b)">Download Ticket 🎫</button>
             <button class="btn-cancel"
               (click)="cancelBooking(b.id)"
               [disabled]="cancellingId === b.id">
@@ -139,6 +145,102 @@
       </div>
     </ng-template>
 
+  </div>
+
+  <!-- ══ CANCELLED BOOKINGS SECTION ══ -->
+  <div class="cancelled-section" *ngIf="cancelledBookings.length > 0">
+    <div class="cancelled-header" (click)="showCancelledSection = !showCancelledSection">
+      <div class="cancelled-header-left">
+        <span class="cancelled-icon">🗑️</span>
+        <div>
+          <h2>Cancelled Bookings</h2>
+          <p>{{ cancelledBookings.length }} booking{{ cancelledBookings.length > 1 ? 's' : '' }} cancelled</p>
+        </div>
+      </div>
+      <button class="toggle-btn" [class.open]="showCancelledSection">
+        {{ showCancelledSection ? '▲ Hide' : '▼ Show' }}
+      </button>
+    </div>
+
+    <div class="cancelled-grid" *ngIf="showCancelledSection">
+      <div class="cancelled-card" *ngFor="let b of cancelledBookings">
+
+        <!-- Image -->
+        <div class="cc-img">
+          <img [src]="b.image" [alt]="b.destination" loading="lazy" />
+          <div class="cc-img-overlay"></div>
+          <span class="cc-badge">🚫 Cancelled</span>
+          <span class="cc-cat">
+            {{ b.category === 'india' || b.category === 'domestic' ? '🇮🇳 India' : '🌍 International' }}
+          </span>
+        </div>
+
+        <!-- Body -->
+        <div class="cc-body">
+          <div class="cc-top">
+            <h3>{{ b.destination }}</h3>
+            <span class="cc-id">#{{ b.id.toString().slice(-6) }}</span>
+          </div>
+
+          <!-- Cancelled on banner -->
+          <div class="cc-cancelled-on">
+            <span>🗓️ Cancelled on {{ formatCancelDate(b.cancelledAt) }}</span>
+          </div>
+
+          <div class="cc-meta-grid">
+            <div class="meta-cell">
+              <span class="meta-icon">👤</span>
+              <div>
+                <span class="meta-val">{{ b.name }}</span>
+                <span class="meta-lbl">Traveller</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">📅</span>
+              <div>
+                <span class="meta-val">{{ b.date }}</span>
+                <span class="meta-lbl">Travel Date</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">👥</span>
+              <div>
+                <span class="meta-val">{{ b.people }} {{ b.people === 1 ? 'Person' : 'People' }}</span>
+                <span class="meta-lbl">Travellers</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">🌙</span>
+              <div>
+                <span class="meta-val">{{ b.days }} {{ b.days === 1 ? 'Night' : 'Nights' }}</span>
+                <span class="meta-lbl">Duration</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">🏨</span>
+              <div>
+                <span class="meta-val">{{ b.roomType }}</span>
+                <span class="meta-lbl">Room Type</span>
+              </div>
+            </div>
+            <div class="meta-cell">
+              <span class="meta-icon">💰</span>
+              <div>
+                <span class="meta-val">{{ currencyService.getCurrencySymbol(b.category) }}{{ b.total | number }}</span>
+                <span class="meta-lbl">Amount Paid</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rebook action -->
+          <div class="cc-actions">
+            <button class="btn-explore" [routerLink]="['/explore', b.destinationId]">View Destination</button>
+            <button class="btn-rebook" [routerLink]="['/bookings', b.destinationId]">Rebook ↩️</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <!-- FOOTER CTA -->

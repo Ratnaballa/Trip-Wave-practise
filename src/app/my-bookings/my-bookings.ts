@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { BookingService, BookingRecord } from '../services/booking.service';
+import { BookingService, BookingRecord, CancelledRecord } from '../services/booking.service';
 import { Currency } from '../currency';
 import { CompletedCountPipe } from '../services/completed-count.pipe';
+import { TicketService } from '../services/ticket.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-my-bookings',
@@ -13,22 +15,37 @@ import { CompletedCountPipe } from '../services/completed-count.pipe';
   styleUrls: ['./my-bookings.css']
 })
 export class MyBookings implements OnInit {
-  bookings: BookingRecord[] = [];
+  bookings: BookingRecord[]           = [];
+  cancelledBookings: CancelledRecord[] = [];
   cancellingId: number | null = null;
   showCancelToast = false;
+  userName = '';
+  showCancelledSection = false;
 
   constructor(
     private bookingService: BookingService,
     public currencyService: Currency,
-    private router: Router
+    private router: Router,
+    public ticketService: TicketService,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
+    const user = this.auth.getUser();
+    if (!user) {
+      console.warn('[MyBookings] No user session — redirecting to /login');
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.userName = user.name;
     this.loadBookings();
   }
 
   loadBookings() {
-    this.bookings = this.bookingService.getAll().reverse(); // newest first
+    const email = this.auth.getUserEmail();
+    this.bookings          = this.bookingService.getByUser(email).reverse();
+    this.cancelledBookings = this.bookingService.getCancelledByUser(email).reverse();
+    console.log(`[MyBookings] Showing ${this.bookings.length} active, ${this.cancelledBookings.length} cancelled for ${email}`);
   }
 
   cancelBooking(id: number) {
@@ -40,6 +57,10 @@ export class MyBookings implements OnInit {
       this.showCancelToast = true;
       setTimeout(() => this.showCancelToast = false, 3000);
     }, 150);
+  }
+
+  formatCancelDate(iso: string): string {
+    return new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
   goBook() {

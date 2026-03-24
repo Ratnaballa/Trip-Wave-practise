@@ -10,36 +10,112 @@
     <li><a routerLink="/my-bookings">My Bookings</a></li>
     <li><a routerLink="/contact">Contact</a></li>
     <div class="wishlist-wrapper">
-        <a routerLink="/wishlist" class="wishlist-icon">
+      <a routerLink="/wishlist" class="wishlist-icon">
         <i class="fa-solid fa-heart"></i>
-        </a>
+      </a>
       <span class="badge">{{ wishlistCount }}</span>
-</div>
+    </div>
   </ul>
-  <button class="primary-btn login-btn">Login</button>
+  <!-- Logged out: Login button -->
+  <button class="primary-btn login-btn" *ngIf="!isLoggedIn" routerLink="/login">Login</button>
+
+  <!-- Logged in: User avatar chip -->
+  <div class="user-chip" *ngIf="isLoggedIn" routerLink="/profile">
+    <span class="user-avatar">{{ userName[0] | uppercase }}</span>
+    <span class="user-name">{{ userName }}</span>
+  </div>
 </nav>
-<!-- PAGE CONTENT WRAPPER -->
+
+<!-- PAGE CONTENT -->
 <div class="page-content">
   <router-outlet></router-outlet>
 </div>
+
 <!-- Sidebar Overlay -->
-<div class="sidebar-overlay"
-     *ngIf="isSidebarOpen"
-     (click)="toggleSidebar()">
-</div>
+<div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
+
 <!-- Sidebar -->
 <div class="sidebar" [class.open]="isSidebarOpen">
+
   <div class="sidebar-header">
     <h3>🌊 TripWave</h3>
     <span class="close-btn" (click)="toggleSidebar()">✖</span>
   </div>
-  <ul class="sidebar-links">
-    <li routerLink="/settings" (click)="toggleSidebar()">⚙ Settings</li>
-    <li routerLink="/notifications" (click)="toggleSidebar()">🔔 Notifications</li>
-    <li routerLink="/reports" (click)="toggleSidebar()">📊 Reports</li>
-    <li routerLink="/support" (click)="toggleSidebar()">🆘 Support</li>
-    <hr>
-    <li routerLink="/signin" (click)="toggleSidebar()">🔑 Sign In</li>
-    <li (click)="signOut()">🚪 Sign Out</li>
-  </ul>
+
+  <!-- USER CARD (logged in) -->
+  <div class="sb-user-card" *ngIf="isLoggedIn">
+    <div class="sb-user-avatar">{{ userName[0] | uppercase }}</div>
+    <div class="sb-user-info">
+      <span class="sb-user-name">{{ userName }}</span>
+      <span class="sb-user-tag">Traveller</span>
+    </div>
+  </div>
+
+  <!-- NAVIGATE -->
+  <div class="sidebar-group">
+    <span class="sidebar-group-label">NAVIGATE</span>
+    <ul class="sidebar-links">
+      <li routerLink="/home"         (click)="toggleSidebar()">
+        <span class="sb-icon">🏠</span> Home
+      </li>
+      <li routerLink="/destinations" (click)="toggleSidebar()">
+        <span class="sb-icon">🗺️</span> Destinations
+      </li>
+      <li routerLink="/packages"     (click)="toggleSidebar()">
+        <span class="sb-icon">✈️</span> Packages
+      </li>
+      <li routerLink="/my-bookings"  (click)="toggleSidebar()">
+        <span class="sb-icon">🧳</span> My Bookings
+      </li>
+      <li routerLink="/wishlist"     (click)="toggleSidebar()">
+        <span class="sb-icon">❤️</span>
+        <span class="sb-link-text">Wishlist</span>
+        <span class="sb-badge" *ngIf="wishlistCount > 0">{{ wishlistCount }}</span>
+      </li>
+      <li routerLink="/contact"      (click)="toggleSidebar()">
+        <span class="sb-icon">📬</span> Contact
+      </li>
+    </ul>
+  </div>
+
+  <!-- ACCOUNT -->
+  <div class="sidebar-group">
+    <span class="sidebar-group-label">ACCOUNT</span>
+    <ul class="sidebar-links">
+      <li routerLink="/profile"  (click)="toggleSidebar()">
+        <span class="sb-icon">👤</span> Profile
+      </li>
+      <li routerLink="/settings" (click)="toggleSidebar()">
+        <span class="sb-icon">⚙️</span> Settings
+      </li>
+    </ul>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="sidebar-group">
+    <span class="sidebar-group-label">FEATURES</span>
+    <ul class="sidebar-links">
+      <li routerLink="/offers" (click)="toggleSidebar()">
+        <span class="sb-icon">🎁</span> Offers
+      </li>
+    </ul>
+  </div>
+
+  <!-- SUPPORT -->
+  <div class="sidebar-group">
+    <span class="sidebar-group-label">SUPPORT</span>
+    <ul class="sidebar-links">
+      <li routerLink="/support" (click)="toggleSidebar()">
+        <span class="sb-icon">🆘</span> Support
+      </li>
+    </ul>
+  </div>
+
+  <!-- AUTH -->
+  <div class="sidebar-footer">
+    <button class="signout-btn" (click)="signOut()">
+      <span>🚪</span> Sign Out
+    </button>
+  </div>
+
 </div>

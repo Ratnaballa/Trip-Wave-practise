@@ -1,67 +1,142 @@
-<div class="wishlist-page">
+<div class="wl-page">
 
-  <!-- Header -->
-  <div class="wishlist-header">
-    <div class="header-left">
-      <h1>❤️ Your Wishlist</h1>
-      <p class="subtitle">{{ wishlistItems.length }} {{ wishlistItems.length === 1 ? 'destination' : 'destinations' }} saved</p>
+  <!-- ── HERO ─────────────────────────────────────────────── -->
+  <div class="wl-hero">
+    <div class="wl-hero-bg"></div>
+    <div class="wl-hero-content">
+      <div class="wl-hero-left">
+        <span class="wl-eyebrow">✦ Your Collection</span>
+        <h1>Dream<br><span class="wl-gold">Destinations</span></h1>
+        <p>Places you've fallen in love with.<br>Ready when you are.</p>
+      </div>
+      <div class="wl-hero-right" *ngIf="allItems.length > 0">
+        <div class="wl-counter">
+          <span class="wl-counter-num">{{ allItems.length }}</span>
+          <span class="wl-counter-lbl">Saved Places</span>
+        </div>
+        <div class="wl-counter">
+          <span class="wl-counter-num wl-gold">{{ indiaCount }}</span>
+          <span class="wl-counter-lbl">India</span>
+        </div>
+        <div class="wl-counter">
+          <span class="wl-counter-num wl-gold">{{ intlCount }}</span>
+          <span class="wl-counter-lbl">International</span>
+        </div>
+      </div>
     </div>
-    <a routerLink="/destinations" class="explore-btn">🌍 Explore More</a>
   </div>
 
-  <!-- Empty State -->
-  <div class="empty-state" *ngIf="wishlistItems.length === 0">
-    <div class="empty-icon">🗺️</div>
-    <h2>No Favorites Yet</h2>
-    <p>Start exploring destinations and save your favorites here!</p>
-    <a routerLink="/destinations" class="empty-cta">Explore Destinations →</a>
+  <!-- ── TOOLBAR ────────────────────────────────────────────── -->
+  <div class="wl-toolbar" *ngIf="allItems.length > 0">
+    <div class="wl-filters">
+      <button class="wl-ftab" [class.active]="activeFilter==='all'"           (click)="setFilter('all')">All</button>
+      <button class="wl-ftab" [class.active]="activeFilter==='india'"         (click)="setFilter('india')">🇮🇳 India</button>
+      <button class="wl-ftab" [class.active]="activeFilter==='international'" (click)="setFilter('international')">🌍 International</button>
+    </div>
+    <div class="wl-toolbar-right">
+      <select class="wl-sort" (change)="setSort($any($event.target).value)">
+        <option value="default">Sort: Default</option>
+        <option value="price-asc">Price ↑</option>
+        <option value="price-desc">Price ↓</option>
+        <option value="rating">Top Rated</option>
+      </select>
+      <span class="wl-count">{{ wishlistItems.length }} place{{ wishlistItems.length !== 1 ? 's' : '' }}</span>
+      <button class="wl-clear" (click)="showClearConfirm=true">Clear All</button>
+    </div>
   </div>
 
-  <!-- Cards Grid -->
-  <div class="grid" *ngIf="wishlistItems.length > 0">
-    <div class="card" *ngFor="let item of wishlistItems">
+  <!-- ── CONFIRM MODAL ─────────────────────────────────────── -->
+  <div class="wl-backdrop" *ngIf="showClearConfirm" (click)="showClearConfirm=false">
+    <div class="wl-modal" (click)="$event.stopPropagation()">
+      <span class="modal-icon">🗑️</span>
+      <h3>Clear your wishlist?</h3>
+      <p>All {{ allItems.length }} saved destinations will be removed.</p>
+      <div class="modal-btns">
+        <button class="modal-cancel" (click)="showClearConfirm=false">Cancel</button>
+        <button class="modal-confirm" (click)="clearAll()">Yes, Clear</button>
+      </div>
+    </div>
+  </div>
 
-      <!-- Image -->
-      <div class="img-wrapper">
-        <img [src]="item.image" [alt]="item.name" />
-        <div class="img-overlay"></div>
+  <!-- ── LIST ──────────────────────────────────────────────── -->
+  <div class="wl-list" *ngIf="wishlistItems.length > 0">
+    <div class="wl-item"
+         *ngFor="let item of wishlistItems; let i = index"
+         [class.removing]="removingId === item.id"
+         [style.animation-delay]="(i * 60) + 'ms'">
 
-        <!-- Category Badge -->
-        <span class="category-badge">
-          {{ item.category === 'india' ? '🇮🇳 India' : '🌍 International' }}
-        </span>
-
-        <!-- Remove Button -->
-        <button class="remove-btn" (click)="remove(item.id)" title="Remove from wishlist">
-          ✕
-        </button>
-
-        <!-- Rating -->
-        <div class="rating-badge">
-          ★ {{ item.rating }}/5
-        </div>
+      <!-- Left: big image -->
+      <div class="wi-img-wrap">
+        <img [src]="item.image" [alt]="item.name" loading="lazy" />
+        <div class="wi-img-shade"></div>
+        <span class="wi-num">{{ (i + 1).toString().padStart(2,'0') }}</span>
+        <button class="wi-heart" (click)="remove(item.id)" title="Remove">♥</button>
       </div>
 
-      <!-- Card Body -->
-      <div class="card-body">
-        <h2>{{ item.name }}</h2>
-        <p class="desc">{{ item.description }}</p>
+      <!-- Right: content -->
+      <div class="wi-content">
 
-        <div class="card-footer">
-          <div class="price-block">
-            <span class="price-label">From</span>
-            <span class="price">
-              {{ currencyService.getCurrencySymbol(item.category) }}{{ currencyService.convertPrice(item.price, item.category) }}
+        <div class="wi-top">
+          <div>
+            <span class="wi-cat" [class.intl]="item.category==='international'">
+              {{ item.category === 'india' || item.category === 'domestic' ? '🇮🇳 India' : '🌍 International' }}
             </span>
-            <span class="per-person">/ person</span>
+            <h2 class="wi-name">{{ item.name }}</h2>
+            <p class="wi-desc">{{ item.description }}</p>
           </div>
-          <div class="action-btns">
-            <a [routerLink]="['/explore', item.id]" class="explore-link">Explore →</a>
-            <a [routerLink]="['/bookings', item.id]" class="book-link">Book</a>
+
+          <!-- Stars -->
+          <div class="wi-stars">
+            <span class="wi-star filled" *ngFor="let s of stars(item.rating)">★</span>
+            <span class="wi-star empty"  *ngFor="let s of emptyStars(item.rating)">★</span>
           </div>
         </div>
-      </div>
 
+        <!-- Divider -->
+        <div class="wi-divider"></div>
+
+        <!-- Bottom row -->
+        <div class="wi-bottom">
+          <div class="wi-price-block">
+            <span class="wi-from">Starting from</span>
+            <span class="wi-price">
+              {{ currencyService.getCurrencySymbol(item.category) }}{{ currencyService.convertPrice(item.price, item.category) | number }}
+            </span>
+            <span class="wi-per">per person</span>
+          </div>
+          <div class="wi-actions">
+            <a [routerLink]="['/explore', item.id]" class="wi-btn-ghost">View Details</a>
+            <a [routerLink]="['/bookings', item.id]" class="wi-btn-gold">Book Now ✦</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- No results after filter -->
+  <div class="wl-no-results" *ngIf="allItems.length > 0 && wishlistItems.length === 0">
+    <span>🔍</span>
+    <p>No destinations match this filter.</p>
+    <button (click)="setFilter('all')">Show All</button>
+  </div>
+
+  <!-- ── EMPTY STATE ────────────────────────────────────────── -->
+  <div class="wl-empty" *ngIf="allItems.length === 0">
+    <div class="wl-empty-inner">
+      <div class="wl-empty-icon">♥</div>
+      <h2>Your wishlist is empty</h2>
+      <p>Explore destinations and tap the heart to save your favourites here.</p>
+      <a routerLink="/destinations" class="wl-empty-btn">Explore Destinations ✈️</a>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
+  <div class="wl-footer" *ngIf="allItems.length > 0">
+    <div class="wl-footer-inner">
+      <span class="wl-footer-tag">✦ Ready to travel?</span>
+      <h3>Turn your wishlist into memories</h3>
+      <a routerLink="/packages" class="wl-footer-btn">Browse Packages</a>
     </div>
   </div>
 

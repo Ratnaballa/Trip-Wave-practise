@@ -1,9 +1,9 @@
-:root {
-  /* Modern Color Palette */
+:root,
+[data-theme="light"] {
   --bg-color: #f8fafc;
-  --nav-bg: rgba(10, 31, 68, 0.85); /* Glassmorphic navy */
+  --nav-bg: rgba(10, 31, 68, 0.85);
   --nav-blur: 12px;
-  --primary: #0ea5e9; /* Vibrant Cyan */
+  --primary: #0ea5e9;
   --primary-hover: #0284c7;
   --primary-glow: rgba(14, 165, 233, 0.4);
   --text-main: #0f172a;
@@ -11,14 +11,32 @@
   --sidebar-bg: #0f172a;
   --footer-bg: #020617;
   --card-bg: #ffffff;
-  
-  /* Typography */
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
+  --shadow-soft: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01);
+  --shadow-hover: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-  /* Shadows and Transitions */
-  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-  --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+[data-theme="dark"] {
+  --bg-color: #000000;
+  --nav-bg: rgba(0, 0, 0, 0.95);
+  --nav-blur: 12px;
+  --primary: #38bdf8;
+  --primary-hover: #0ea5e9;
+  --primary-glow: rgba(56, 189, 248, 0.4);
+  --text-main: #e2e8f0;
+  --text-light: #94a3b8;
+  --sidebar-bg: #0a0a0a;
+  --footer-bg: #000000;
+  --card-bg: #111111;
+  --surface: #1a1a1a;
+  --border: rgba(255,255,255,0.08);
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --shadow-soft: 0 10px 25px -5px rgba(0,0,0,0.6);
+  --shadow-hover: 0 20px 25px -5px rgba(0,0,0,0.8);
   --transition-fast: 0.2s ease;
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -36,6 +54,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -49,7 +68,6 @@ a {
   color: inherit;
 }
 
-/* Premium Primary Button (Global) */
 .primary-btn {
   background: linear-gradient(135deg, var(--primary), #38bdf8);
   border: none;
@@ -69,3 +87,175 @@ a {
   box-shadow: 0 6px 20px var(--primary-glow);
   background: linear-gradient(135deg, var(--primary-hover), var(--primary));
 }
+
+/* ══════════════════════════════════════════
+   GLOBAL DARK THEME OVERRIDES
+   Uses !important to override hardcoded
+   colors in individual component CSS files
+══════════════════════════════════════════ */
+
+/* ── Body & page wrappers ── */
+[data-theme="dark"] body                { background-color: #000000 !important; color: #e2e8f0 !important; }
+[data-theme="dark"] .page-wrapper       { background: #000000 !important; }
+[data-theme="dark"] .mb-page            { background: #000000 !important; }
+[data-theme="dark"] .wl-page            { background: #000000 !important; color: #e2e8f0 !important; }
+[data-theme="dark"] .wl-list            { background: #000000 !important; }
+[data-theme="dark"] .wl-empty           { background: #000000 !important; }
+[data-theme="dark"] .wl-footer          { background: #000000 !important; border-color: rgba(255,255,255,0.07) !important; }
+[data-theme="dark"] .pkg-page           { background: #000000 !important; }
+[data-theme="dark"] .ct-page            { background: #000000 !important; }
+[data-theme="dark"] .popular-section    { background: #000000 !important; }
+
+/* ── Hero gradient fade to black ── */
+[data-theme="dark"] .hero::after        { background: linear-gradient(to top, #000000, transparent) !important; }
+
+/* ── Cards ── */
+[data-theme="dark"] .card,
+[data-theme="dark"] .pkg-card,
+[data-theme="dark"] .bk-card,
+[data-theme="dark"] .cancelled-card,
+[data-theme="dark"] .wl-item,
+[data-theme="dark"] .wi-content,
+[data-theme="dark"] .profile-card,
+[data-theme="dark"] .settings-card,
+[data-theme="dark"] .settings-content,
+[data-theme="dark"] .settings-nav,
+[data-theme="dark"] .form-card,
+[data-theme="dark"] .info-panel,
+[data-theme="dark"] .faq-quick,
+[data-theme="dark"] .success-card,
+[data-theme="dark"] .success-state,
+[data-theme="dark"] .wl-modal,
+[data-theme="dark"] .cancelled-header  {
+  background: #111111 !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: #e2e8f0 !important;
+}
+
+/* ── Stats bars ── */
+[data-theme="dark"] .mb-stats,
+[data-theme="dark"] .stats-bar          { background: #111111 !important; box-shadow: 0 10px 36px rgba(0,0,0,0.5) !important; }
+[data-theme="dark"] .stat-n,
+[data-theme="dark"] .stat-num           { color: #38bdf8 !important; }
+[data-theme="dark"] .stat-l,
+[data-theme="dark"] .stat-label         { color: #94a3b8 !important; }
+[data-theme="dark"] .stat-div,
+[data-theme="dark"] .stat-divider       { background: rgba(255,255,255,0.1) !important; }
+
+/* ── Inner surfaces ── */
+[data-theme="dark"] .meta-cell,
+[data-theme="dark"] .info-item,
+[data-theme="dark"] .detail-cell,
+[data-theme="dark"] .price-row,
+[data-theme="dark"] .email-note,
+[data-theme="dark"] .ref-box,
+[data-theme="dark"] .filter-bar         { background: #1a1a1a !important; border-color: rgba(255,255,255,0.08) !important; }
+
+/* ── Text: primary ── */
+[data-theme="dark"] .card h3,
+[data-theme="dark"] .card-title,
+[data-theme="dark"] .card-header h3,
+[data-theme="dark"] .card-top h3,
+[data-theme="dark"] .cc-top h3,
+[data-theme="dark"] .meta-val,
+[data-theme="dark"] .info-val,
+[data-theme="dark"] .d-val,
+[data-theme="dark"] .ref-val,
+[data-theme="dark"] .wi-name,
+[data-theme="dark"] .wl-footer h3,
+[data-theme="dark"] .wl-modal h3,
+[data-theme="dark"] .wl-empty-inner h2,
+[data-theme="dark"] .empty-state h2,
+[data-theme="dark"] .avatar-info h2,
+[data-theme="dark"] .section-heading,
+[data-theme="dark"] .setting-block-title,
+[data-theme="dark"] .toggle-info strong,
+[data-theme="dark"] .select-row label,
+[data-theme="dark"] .info-panel-title,
+[data-theme="dark"] .faq-quick h4,
+[data-theme="dark"] .success-card h1,
+[data-theme="dark"] .form-card-header h3,
+[data-theme="dark"] .info-text strong,
+[data-theme="dark"] .result-count strong,
+[data-theme="dark"] .cancelled-header-left h2 { color: #e2e8f0 !important; }
+
+/* ── Text: secondary ── */
+[data-theme="dark"] .card p,
+[data-theme="dark"] .card-desc,
+[data-theme="dark"] .description,
+[data-theme="dark"] .meta-lbl,
+[data-theme="dark"] .info-label,
+[data-theme="dark"] .d-label,
+[data-theme="dark"] .toggle-info p,
+[data-theme="dark"] .booking-id,
+[data-theme="dark"] .cc-id,
+[data-theme="dark"] .wi-desc,
+[data-theme="dark"] .wl-modal p,
+[data-theme="dark"] .wl-empty-inner p,
+[data-theme="dark"] .empty-state p,
+[data-theme="dark"] .sub,
+[data-theme="dark"] .stat-l,
+[data-theme="dark"] .result-count,
+[data-theme="dark"] .info-text span,
+[data-theme="dark"] .form-card-header p,
+[data-theme="dark"] .privacy-note,
+[data-theme="dark"] .email-note         { color: #94a3b8 !important; }
+
+/* ── Borders ── */
+[data-theme="dark"] .settings-section,
+[data-theme="dark"] .setting-block,
+[data-theme="dark"] .toggle-row,
+[data-theme="dark"] .avatar-wrap,
+[data-theme="dark"] .save-row,
+[data-theme="dark"] .section-heading,
+[data-theme="dark"] .card-footer,
+[data-theme="dark"] .wl-toolbar,
+[data-theme="dark"] .info-panel-title,
+[data-theme="dark"] .social-row,
+[data-theme="dark"] .form-divider,
+[data-theme="dark"] .wi-divider          { border-color: rgba(255,255,255,0.07) !important; }
+
+/* ── Inputs & selects ── */
+[data-theme="dark"] .select-row select,
+[data-theme="dark"] .filter-group select,
+[data-theme="dark"] .wl-sort,
+[data-theme="dark"] .field input,
+[data-theme="dark"] .field textarea,
+[data-theme="dark"] .search-box input,
+[data-theme="dark"] .filter-bar select,
+[data-theme="dark"] .hero-search input  {
+  background: #1a1a1a !important;
+  border-color: rgba(255,255,255,0.12) !important;
+  color: #e2e8f0 !important;
+}
+
+/* ── Filter & reset buttons ── */
+[data-theme="dark"] .filter-buttons button,
+[data-theme="dark"] .reset-btn,
+[data-theme="dark"] .wl-ftab            {
+  background: #1a1a1a !important;
+  border-color: rgba(255,255,255,0.12) !important;
+  color: #94a3b8 !important;
+}
+
+/* ── Chips ── */
+[data-theme="dark"] .chip,
+[data-theme="dark"] .topic-chip         { background: #1a1a1a !important; border-color: rgba(255,255,255,0.12) !important; color: #94a3b8 !important; }
+[data-theme="dark"] .chip.active,
+[data-theme="dark"] .topic-chip.active  { background: rgba(56,189,248,0.12) !important; border-color: #38bdf8 !important; color: #38bdf8 !important; }
+
+/* ── Settings nav ── */
+[data-theme="dark"] .settings-nav-item          { color: #94a3b8 !important; }
+[data-theme="dark"] .settings-nav-item:hover    { background: #1a1a1a !important; color: #e2e8f0 !important; }
+[data-theme="dark"] .settings-nav-item.active   { background: rgba(56,189,248,0.1) !important; color: #38bdf8 !important; }
+
+/* ── Theme cards ── */
+[data-theme="dark"] .theme-card         { border-color: rgba(255,255,255,0.1) !important; color: #94a3b8 !important; background: #111111 !important; }
+[data-theme="dark"] .theme-card.active  { border-color: #38bdf8 !important; background: rgba(56,189,248,0.08) !important; color: #38bdf8 !important; }
+
+/* ── Pill badges ── */
+[data-theme="dark"] .booking-id,
+[data-theme="dark"] .cc-id              { background: #1a1a1a !important; }
+
+/* ── Success banner ── */
+[data-theme="dark"] .success-banner     { background: rgba(22,163,74,0.1) !important; border-color: rgba(22,163,74,0.3) !important; }

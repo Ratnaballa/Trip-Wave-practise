@@ -1,0 +1,34 @@
+<div class="page-wrapper">
+  <div class="page-hero">
+    <div class="page-hero-overlay">
+      <div class="page-badge">🆘 Help Center</div>
+      <h1>Support</h1>
+      <p>Find answers to common questions or reach out to us</p>
+    </div>
+  </div>
+
+  <div class="page-container">
+
+    <div class="faq-section">
+      <h3 class="faq-title">Frequently Asked Questions</h3>
+      <div class="faq-list">
+        <div class="faq-item" *ngFor="let faq of faqs" [class.open]="faq.open">
+          <div class="faq-q" (click)="toggle(faq)">
+            <span>{{ faq.q }}</span>
+            <span class="faq-arrow">{{ faq.open ? '▲' : '▼' }}</span>
+          </div>
+          <div class="faq-a" *ngIf="faq.open">{{ faq.a }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="support-cta">
+      <h3>Still need help?</h3>
+      <p>Our support team is available Mon–Sat, 9AM–6PM IST</p>
+      <div class="support-actions">
+        <button routerLink="/contact" class="btn-primary">Contact Us 📬</button>
+      </div>
+    </div>
+
+  </div>
+</div>

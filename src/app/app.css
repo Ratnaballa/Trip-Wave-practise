@@ -161,15 +161,14 @@
 /* Sidebar links */
 .sidebar-links {
   list-style: none;
-  padding: 20px;
+  padding: 0 12px;
   margin: 0;
-  flex-grow: 1;
 }
 
 .sidebar-links li {
-  padding: 16px 20px;
-  margin-bottom: 8px;
-  font-size: 16px;
+  padding: 13px 16px;
+  margin-bottom: 4px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   border-radius: 12px;
@@ -181,15 +180,56 @@
 }
 
 .sidebar-links li:hover {
-  background: rgba(14, 165, 233, 0.1);
+  background: rgba(14, 165, 233, 0.12);
   color: var(--primary);
   transform: translateX(5px);
 }
 
-.sidebar-links hr {
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  margin: 20px;
+.sb-icon { font-size: 18px; width: 24px; text-align: center; }
+
+/* Sidebar groups */
+.sidebar-group {
+  padding: 16px 12px 4px;
+}
+
+.sidebar-group-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: rgba(255,255,255,0.3);
+  padding: 0 16px 8px;
+  text-transform: uppercase;
+}
+
+/* Sidebar footer / sign out */
+.sidebar-footer {
+  padding: 16px 24px 28px;
+  margin-top: auto;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.signout-btn {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(239,68,68,0.1);
+  border: 1.5px solid rgba(239,68,68,0.25);
+  border-radius: 12px;
+  color: #fca5a5;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.signout-btn:hover {
+  background: rgba(239,68,68,0.2);
+  border-color: rgba(239,68,68,0.5);
+  color: #f87171;
+  transform: translateX(3px);
 }
 
 .login-btn {
@@ -223,4 +263,138 @@
 .wishlist-icon:hover {
   transform: scale(1.2);
   color: #dc2626;
+}
+
+/* User chip (logged-in state in navbar) */
+.user-chip {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.12); border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 50px; padding: 6px 16px 6px 6px;
+  cursor: pointer; transition: all 0.2s;
+}
+.user-chip:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
+
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #6366f1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: white;
+}
+
+.user-name { font-size: 14px; font-weight: 600; color: white; }
+
+/* Sidebar user card */
+.sb-user-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 16px 4px;
+  padding: 14px 16px;
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  border-radius: 14px;
+}
+
+.sb-user-avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #6366f1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800; color: white;
+  flex-shrink: 0;
+}
+
+.sb-user-info {
+  display: flex; flex-direction: column; gap: 2px;
+  min-width: 0;
+}
+
+.sb-user-name {
+  font-size: 15px; font-weight: 700; color: white;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.sb-user-tag {
+  font-size: 11px; font-weight: 600;
+  color: #0ea5e9;
+  text-transform: uppercase; letter-spacing: 0.8px;
+}
+
+/* Wishlist badge in sidebar */
+.sb-link-text { flex: 1; }
+
+.sb-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 11px; font-weight: 800;
+  min-width: 20px; height: 20px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 6px;
+  margin-left: auto;
+}
+
+/* Sidebar scrollable body */
+.sidebar {
+  overflow-y: auto;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+/* Theme switcher row in sidebar */
+.sb-theme-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: default;
+}
+
+.sb-theme-pills {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.theme-pill {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.theme-pill:hover {
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.12);
+  transform: scale(1.1);
+}
+
+.theme-pill.active {
+  border-color: var(--primary);
+  background: rgba(14,165,233,0.2);
+  box-shadow: 0 0 8px var(--primary-glow);
+}
+
+/* Collapsible settings item */
+.sb-settings-item { cursor: pointer; }
+.sb-settings-item.expanded { color: var(--primary); background: rgba(14,165,233,0.08); }
+.sb-chevron { margin-left: auto; font-size: 10px; opacity: 0.6; }
+
+/* Theme row indented under settings */
+.sb-theme-row {
+  padding-left: 28px !important;
+  background: rgba(255,255,255,0.03);
+  border-left: 2px solid rgba(14,165,233,0.2);
+  margin-left: 16px;
+  border-radius: 0 10px 10px 0 !important;
+  cursor: default;
 }

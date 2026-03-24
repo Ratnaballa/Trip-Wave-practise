@@ -1,0 +1,201 @@
+<div class="ct-page">
+
+  <!-- ══ HERO ══ -->
+  <div class="ct-hero">
+    <div class="ct-hero-overlay">
+      <div class="ct-badge">📬 We'd Love to Hear From You</div>
+      <h1>Get In <span class="hero-hl">Touch</span></h1>
+      <p>Our travel experts are ready to help you plan the perfect trip</p>
+      <div class="hero-chips">
+        <span class="hchip">⚡ Avg. reply in 2 hours</span>
+        <span class="hchip">🌐 Available in 5 languages</span>
+        <span class="hchip">⭐ 4.9 / 5 support rating</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN LAYOUT ══ -->
+  <div class="ct-container">
+
+    <!-- LEFT: FORM COLUMN -->
+    <div class="ct-form-col">
+
+      <!-- SUCCESS STATE -->
+      <div class="success-state" *ngIf="submitted">
+        <div class="success-icon">🎉</div>
+        <h3>Message Sent Successfully!</h3>
+        <p>Thank you for reaching out. Our team will get back to you within <strong>2–4 hours</strong>.</p>
+        <button class="btn-again" (click)="submitted = false">Send Another Message</button>
+      </div>
+
+      <!-- FORM -->
+      <div class="form-card" *ngIf="!submitted" [formGroup]="contactForm">
+
+        <div class="form-card-header">
+          <h3>Send Us a Message</h3>
+          <p>Fill in the details below and we'll respond promptly</p>
+        </div>
+
+        <!-- TOPIC CHIPS -->
+        <div class="topic-section">
+          <label class="section-label">What's this about?</label>
+          <div class="topic-chips">
+            <button type="button" class="topic-chip"
+              *ngFor="let t of topics"
+              [class.active]="selectedTopic === t.label"
+              (click)="selectTopic(t.label)">
+              <span>{{ t.icon }}</span>
+              <span>{{ t.label }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- NAME + EMAIL -->
+        <div class="form-row">
+          <div class="field">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" formControlName="name" placeholder="Your full name"
+              [class.is-invalid]="f['name'].invalid && f['name'].touched"
+              [class.is-valid]="f['name'].valid && f['name'].touched" />
+            <span class="err" *ngIf="f['name'].touched && f['name'].errors?.['required']">Name is required.</span>
+            <span class="err" *ngIf="f['name'].touched && f['name'].errors?.['minlength']">Minimum 3 characters.</span>
+          </div>
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" formControlName="email" placeholder="you@example.com"
+              [class.is-invalid]="f['email'].invalid && f['email'].touched"
+              [class.is-valid]="f['email'].valid && f['email'].touched" />
+            <span class="err" *ngIf="f['email'].touched && f['email'].errors?.['required']">Email is required.</span>
+            <span class="err" *ngIf="f['email'].touched && f['email'].errors?.['email']">Enter a valid email.</span>
+          </div>
+        </div>
+
+        <!-- PHONE (optional) -->
+        <div class="field">
+          <label>Phone Number <span class="optional">(optional)</span></label>
+          <input type="tel" formControlName="phone" placeholder="10-digit mobile number"
+            [class.is-invalid]="f['phone'].invalid && f['phone'].touched"
+            [class.is-valid]="f['phone'].valid && f['phone'].value && f['phone'].touched" />
+          <span class="err" *ngIf="f['phone'].touched && f['phone'].errors?.['pattern']">Enter a valid 10-digit number.</span>
+        </div>
+
+        <!-- MESSAGE -->
+        <div class="field">
+          <div class="label-row">
+            <label>Message <span class="req">*</span></label>
+            <span class="char-count" [class.warn]="msgLen > 450">{{ msgLen }}/500</span>
+          </div>
+          <textarea formControlName="message" placeholder="Describe your query in detail..."
+            [class.is-invalid]="f['message'].invalid && f['message'].touched"
+            [class.is-valid]="f['message'].valid && f['message'].touched"></textarea>
+          <span class="err" *ngIf="f['message'].touched && f['message'].errors?.['required']">Message is required.</span>
+          <span class="err" *ngIf="f['message'].touched && f['message'].errors?.['minlength']">At least 20 characters required.</span>
+        </div>
+
+        <!-- SUBMIT -->
+        <button class="btn-send" (click)="sendMessage()" [disabled]="contactForm.invalid || isSubmitting">
+          <ng-container *ngIf="!isSubmitting">
+            <span>Send Message</span>
+            <span class="send-arrow">→</span>
+          </ng-container>
+          <ng-container *ngIf="isSubmitting">
+            <span class="btn-spinner"></span>
+            <span>Sending...</span>
+          </ng-container>
+        </button>
+
+        <p class="privacy-note">🔒 Your information is private and will never be shared.</p>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: INFO COLUMN -->
+    <div class="ct-info-col">
+
+      <!-- Contact Info Cards -->
+      <div class="info-panel">
+        <h3 class="info-panel-title">Contact Information</h3>
+
+        <div class="info-item">
+          <div class="info-icon-wrap" style="background:#eff6ff">📧</div>
+          <div class="info-text">
+            <strong>Email Us</strong>
+            <span>support@tripwave.com</span>
+            <span class="info-sub">For general queries</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon-wrap" style="background:#f0fdf4">📞</div>
+          <div class="info-text">
+            <strong>Call Us</strong>
+            <span>+91 98765 43210</span>
+            <span class="info-sub">Mon–Sat, 9AM–6PM IST</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon-wrap" style="background:#fefce8">💬</div>
+          <div class="info-text">
+            <strong>Live Chat</strong>
+            <span>Available on website</span>
+            <span class="info-sub">Instant support</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon-wrap" style="background:#fdf4ff">📍</div>
+          <div class="info-text">
+            <strong>Our Office</strong>
+            <span>Bengaluru, Karnataka</span>
+            <span class="info-sub">India – 560001</span>
+          </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="social-row">
+          <a class="social-btn" href="#" title="Instagram">📸</a>
+          <a class="social-btn" href="#" title="Twitter">🐦</a>
+          <a class="social-btn" href="#" title="Facebook">📘</a>
+          <a class="social-btn" href="#" title="YouTube">▶️</a>
+        </div>
+      </div>
+
+      <!-- Response Time Card -->
+      <div class="response-card">
+        <div class="response-header">
+          <span class="live-dot"></span>
+          <span>Support Team Online</span>
+        </div>
+        <div class="response-stats">
+          <div class="r-stat">
+            <span class="r-val">~2h</span>
+            <span class="r-lbl">Avg. Response</span>
+          </div>
+          <div class="r-div"></div>
+          <div class="r-stat">
+            <span class="r-val">98%</span>
+            <span class="r-lbl">Resolution Rate</span>
+          </div>
+          <div class="r-div"></div>
+          <div class="r-stat">
+            <span class="r-val">4.9★</span>
+            <span class="r-lbl">Support Rating</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Quick Links -->
+      <div class="faq-quick">
+        <h4>Quick Answers</h4>
+        <a class="faq-link" routerLink="/support">How do I cancel a booking? →</a>
+        <a class="faq-link" routerLink="/support">How is the price calculated? →</a>
+        <a class="faq-link" routerLink="/support">Can I modify my travel date? →</a>
+        <a class="faq-link" routerLink="/support">View all FAQs →</a>
+      </div>
+
+    </div>
+  </div>
+</div>

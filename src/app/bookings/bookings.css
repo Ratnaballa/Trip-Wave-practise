@@ -6,7 +6,7 @@
   padding-bottom: 80px;
 }
 
-/* ══════════ TOAST ══════════ */
+/*   TOAST   */
 .toast {
   position: fixed;
   top: 28px;
@@ -66,7 +66,7 @@
   to   { width: 0%; }
 }
 
-/* ══════════ MODAL ══════════ */
+/*   MODAL   */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -481,7 +481,7 @@
 
 .counter-wrap input:focus { box-shadow: none; border-color: #e2e8f0; }
 
-/* ══════════ ROOM CARDS ══════════ */
+/*   ROOM CARDS    */
 .room-cards {
   display: flex;
   flex-direction: column;
@@ -590,7 +590,7 @@
   box-shadow: 0 0 0 4px rgba(14,165,233,0.1);
 }
 
-/* ══════════ TRUST STRIP ══════════ */
+/*   TRUST STRIP    */
 .trust-strip {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -614,7 +614,7 @@
 
 .trust-item span:first-child { font-size: 22px; }
 
-/* ══════════ CONFIRM BUTTON ══════════ */
+/*   CONFIRM BUTTON    */
 .confirm-btn {
   width: 100%;
   padding: 18px;
@@ -665,7 +665,7 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ══════════ SUMMARY PANEL ══════════ */
+/*   SUMMARY PANEL    */
 .summary-panel {
   display: flex;
   flex-direction: column;
@@ -823,7 +823,7 @@
 }
 
 
-/* ══════════ NOT FOUND ══════════ */
+/*   NOT FOUND   */
 .not-found {
   text-align: center;
   padding: 100px 20px;
@@ -870,7 +870,7 @@
   box-shadow: 0 8px 24px rgba(14,165,233,0.4);
 }
 
-/* ══════════ RESPONSIVE ══════════ */
+/*   RESPONSIVE   */
 @media (max-width: 960px) {
   .bk-container {
     grid-template-columns: 1fr;

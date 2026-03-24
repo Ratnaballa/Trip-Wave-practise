@@ -1,0 +1,85 @@
+<div class="login-page">
+
+  <!-- Background blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="login-card">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <span class="logo-icon">🌊</span>
+      <span class="logo-text">TripWave</span>
+    </div>
+
+    <h1 class="login-title">Welcome to TripWave</h1>
+    <p class="login-sub">Enter your details to continue your journey</p>
+
+    <!-- Error banner -->
+    <div class="error-banner" *ngIf="error">⚠️ {{ error }}</div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+      <!-- Name -->
+      <div class="field-group" [class.invalid]="f['name'].invalid && f['name'].touched">
+        <label>Your name</label>
+        <div class="input-wrap">
+          <span class="input-icon">👤</span>
+          <input type="text" formControlName="name" placeholder="e.g. Ravi Kumar" autocomplete="name" />
+        </div>
+        <span class="field-error" *ngIf="f['name'].touched && f['name'].hasError('required')">Name is required</span>
+        <span class="field-error" *ngIf="f['name'].touched && f['name'].hasError('minlength')">At least 2 characters</span>
+      </div>
+
+      <!-- Email -->
+      <div class="field-group" [class.invalid]="f['email'].invalid && f['email'].touched">
+        <label>Email address</label>
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="email" formControlName="email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <span class="field-error" *ngIf="f['email'].touched && f['email'].hasError('required')">Email is required</span>
+        <span class="field-error" *ngIf="f['email'].touched && f['email'].hasError('email')">Enter a valid email</span>
+      </div>
+
+      <!-- Password -->
+      <div class="field-group" [class.invalid]="f['password'].invalid && f['password'].touched">
+        <label>Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input [type]="showPass ? 'text' : 'password'" formControlName="password"
+                 placeholder="Min. 4 characters" autocomplete="current-password" />
+          <button type="button" class="toggle-pass" (click)="showPass = !showPass">
+            {{ showPass ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        <span class="field-error" *ngIf="f['password'].touched && f['password'].hasError('required')">Password is required</span>
+        <span class="field-error" *ngIf="f['password'].touched && f['password'].hasError('minlength')">At least 4 characters</span>
+      </div>
+
+      <!-- Forgot -->
+      <div class="forgot-row">
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="login-submit" [disabled]="isSubmitting">
+        <span *ngIf="!isSubmitting">Sign In →</span>
+        <span *ngIf="isSubmitting" class="spinner-wrap">
+          <span class="spinner"></span> Signing in…
+        </span>
+      </button>
+
+    </form>
+
+    <p class="signup-hint">
+      New to TripWave? <a routerLink="/destinations" class="signup-link">Explore destinations</a>
+    </p>
+
+    <!-- Demo hint -->
+    <div class="demo-hint">
+      <span>💡</span> Enter your name, any email &amp; password (4+ chars) to sign in
+    </div>
+
+  </div>
+</div>

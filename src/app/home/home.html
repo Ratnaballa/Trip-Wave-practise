@@ -1,76 +1,184 @@
-<!--  Hero  -->
-<section class="hero">
-  <div class="hero-content">
-    <h1>Explore The World With Us</h1>
-    <p>Discover breathtaking destinations and unforgettable experiences.</p>
-    <button class="primary-btn" routerLink="/destinations">
-  Explore Now
-</button>
+<!--  HERO  -->
+<section class="hw-hero">
+  <div class="hw-hero-bg"></div>
+  <div class="hw-hero-overlay"></div>
+
+  <div class="hw-hero-body">
+    <span class="hw-pill">✦ Trusted by 50,000+ travelers</span>
+    <h1 class="hw-headline">
+      Your Next Adventure<br>
+      <span class="hw-hl">Starts Here</span>
+    </h1>
+    <p class="hw-sub">Handpicked destinations. Seamless booking. Memories that last forever.</p>
+
+    <div class="hw-trust">
+      <span>🏆 Best Travel App 2025</span>
+      <span class="hw-dot">·</span>
+      <span>🔒 Secure Booking</span>
+      <span class="hw-dot">·</span>
+      <span>💸 Best Price Guarantee</span>
+    </div>
+  </div>
+
+  <div class="hw-scroll-hint">
+    <span>Scroll to explore</span>
+    <div class="hw-scroll-line"></div>
   </div>
 </section>
-<!--  Popular Destinations   -->
-<section class="destinations">
-  <h2 class="section-title">Popular Destinations</h2>
 
-  <div class="card-container">
-    <div class="card" *ngFor="let place of destinations">
+<!--  STATS  -->
+<div class="hw-stats-wrap">
+  <div class="hw-stats">
+    <div class="hw-stat" *ngFor="let s of stats; let last = last">
+      <span class="hw-stat-num">{{ s.num }}</span>
+      <span class="hw-stat-lbl">{{ s.label }}</span>
+      <div class="hw-stat-div" *ngIf="!last"></div>
+    </div>
+  </div>
+</div>
 
-      <div class="image-wrapper">
-        <img [src]="place.image" />
+<!--  DESTINATIONS  -->
+<section class="hw-section">
+  <div class="hw-section-head">
+    <div>
+      <p class="hw-eyebrow">✦ Curated for you</p>
+      <h2 class="hw-section-title">Popular Destinations</h2>
+    </div>
+    <a class="hw-see-all" routerLink="/destinations">View all →</a>
+  </div>
 
-        <!-- This stays as card-overlay -->
-        <div class="card-overlay">
-          <button class="view-btn" [routerLink]="['/explore', place.id]">View Details</button>
+  <div class="hw-grid">
+    <div
+      class="hw-card"
+      [class.hw-card-featured]="dest.featured"
+      *ngFor="let dest of destinations"
+      [routerLink]="['/explore', dest.id]"
+    >
+      <img class="hw-card-img" [src]="dest.image" [alt]="dest.name" loading="lazy" />
+      <div class="hw-card-gradient"></div>
+
+      <span class="hw-card-tag">{{ dest.tag }}</span>
+
+      <div class="hw-card-info">
+        <div class="hw-card-stars">
+          <span *ngFor="let s of getStars(dest.rating)">★</span>
+        </div>
+        <h3 class="hw-card-name">{{ dest.name }}</h3>
+        <p class="hw-card-country">{{ dest.country }}</p>
+        <p class="hw-card-desc">{{ dest.description }}</p>
+        <button class="hw-card-btn">Explore →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--  WHY US  -->
+<section class="hw-why">
+  <div class="hw-why-inner">
+    <p class="hw-eyebrow hw-eyebrow-light">✦ Why TripWave</p>
+    <h2 class="hw-why-title">Travel Smarter, Not Harder</h2>
+    <div class="hw-why-grid">
+      <div class="hw-why-card">
+        <div class="hw-why-icon">🗺️</div>
+        <h4>Expert Curation</h4>
+        <p>Every destination is handpicked by our travel experts for quality and experience.</p>
+      </div>
+      <div class="hw-why-card">
+        <div class="hw-why-icon">⚡</div>
+        <h4>Instant Booking</h4>
+        <p>Book flights, hotels, and packages in seconds with our streamlined checkout.</p>
+      </div>
+      <div class="hw-why-card">
+        <div class="hw-why-icon">🛡️</div>
+        <h4>Safe & Secure</h4>
+        <p>Your payments and personal data are protected with bank-grade encryption.</p>
+      </div>
+      <div class="hw-why-card">
+        <div class="hw-why-icon">🎧</div>
+        <h4>24/7 Support</h4>
+        <p>Our travel concierge team is always available to assist you anywhere in the world.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="hw-footer">
+
+  <!-- Newsletter strip -->
+  <div class="hw-footer-newsletter">
+    <div class="hw-footer-nl-inner">
+      <div class="hw-footer-nl-text">
+        <h4>Get travel inspiration in your inbox</h4>
+        <p>Deals, guides, and destination highlights — no spam, ever.</p>
+      </div>
+      <div class="hw-footer-nl-form">
+        <input type="email" placeholder="Enter your email" />
+        <button>Subscribe</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main grid -->
+  <div class="hw-footer-inner">
+
+    <div class="hw-footer-brand">
+      <span class="hw-footer-logo">🌊 TripWave</span>
+      <p>Your trusted travel partner for exploring the world's most beautiful destinations, one wave at a time.</p>
+      <div class="hw-socials">
+        <a href="#" class="hw-social" aria-label="X">𝕏</a>
+        <a href="#" class="hw-social" aria-label="LinkedIn">in</a>
+        <a href="#" class="hw-social" aria-label="Instagram">ig</a>
+        <a href="#" class="hw-social" aria-label="YouTube">▶</a>
+      </div>
+      <div class="hw-footer-badge">
+        <span>🏆</span>
+        <div>
+          <strong>Best Travel App 2025</strong>
+          <span>Travel Excellence Awards</span>
         </div>
       </div>
+    </div>
 
-      <h3>{{ place.name }}</h3>
-      <p>{{ place.description }}</p>
+    <div class="hw-footer-col">
+      <h5>Explore</h5>
+      <a routerLink="/destinations">Destinations</a>
+      <a routerLink="/packages">Packages</a>
+      <a routerLink="/wishlist">Wishlist</a>
+      <a routerLink="/contact">Contact Us</a>
+    </div>
 
-      <div class="stars">
-        <span *ngFor="let star of getStars(place.rating)">⭐</span>
+    <div class="hw-footer-col">
+      <h5>Account</h5>
+      <a routerLink="/profile">My Profile</a>
+      <a routerLink="/bookings">My Bookings</a>
+      <a routerLink="/settings">Settings</a>
+    </div>
+
+    <div class="hw-footer-col">
+      <h5>Support</h5>
+      <a routerLink="/contact">Help Center</a>
+      <a href="#">FAQs</a>
+      <div class="hw-footer-contact">
+        <span class="hw-fc-icon">✉</span>
+        <span>support&#64;tripwave.com</span>
       </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!--   CTA   -->
-<section class="cta">
-  <h2>Ready for Your Next Adventure?</h2>
-  <button class="primary-btn">Book Now</button>
-</section>
-
-
-<!--   Footer    -->
-<footer class="footer">
-  <div class="footer-container">
-
-    <div class="footer-section">
-      <h3 class="logo">🌊 TripWave</h3>
-      <p>Your trusted travel partner for exploring the world’s most beautiful destinations.</p>
-    </div>
-
-    <div class="footer-section">
-      <h4>Quick Links</h4>
-      <ul>
-        <li routerLink="/">Home</li>
-        <li routerLink="/destinations">Destinations</li>
-        <li routerLink="/packages">Packages</li>
-        <li routerLink="/contact">Contact</li>
-      </ul>
-    </div>
-
-    <div class="footer-section">
-      <h4>Contact</h4>
-      <p>Email: support@tripwave.com</p>
-      <p>Phone: +91 9876543210</p>
+      <div class="hw-footer-contact">
+        <span class="hw-fc-icon">📞</span>
+        <span>+91 98765 43210</span>
+      </div>
     </div>
 
   </div>
 
-  <div class="footer-bottom">
-    © 2026 TripWave | All Rights Reserved
+  <!-- Bottom bar -->
+  <div class="hw-footer-bottom">
+    <span>© 2026 TripWave. All rights reserved.</span>
+    <div class="hw-footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Settings</a>
+    </div>
   </div>
+
 </footer>

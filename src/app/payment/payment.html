@@ -1,0 +1,233 @@
+<div class="pay-page" *ngIf="booking">
+
+  <!-- HEADER -->
+  <div class="pay-header">
+    <div class="pay-header-inner">
+      <button class="back-btn" routerLink="/destinations">← Back</button>
+      <div class="pay-logo">🌊 TripWave <span>Secure Checkout</span></div>
+      <div class="secure-badge">🔒 SSL Secured</div>
+    </div>
+  </div>
+
+  <!-- PROCESSING OVERLAY -->
+  <div class="processing-overlay" *ngIf="isProcessing">
+    <div class="processing-card">
+      <div class="proc-spinner"></div>
+      <h3>Processing Payment</h3>
+      <p>Please do not close this window...</p>
+      <div class="proc-steps">
+        <span class="proc-step done">✓ Verifying details</span>
+        <span class="proc-step done">✓ Securing transaction</span>
+        <span class="proc-step active">⟳ Confirming booking</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pay-container">
+
+    <!-- LEFT: PAYMENT FORM -->
+    <div class="pay-form-col">
+
+      <!-- METHOD TABS -->
+      <div class="method-tabs">
+        <button class="method-tab" [class.active]="paymentMethod === 'card'" (click)="setMethod('card')">
+          <span class="tab-icon">💳</span>
+          <span>Credit / Debit Card</span>
+        </button>
+        <button class="method-tab" [class.active]="paymentMethod === 'upi'" (click)="setMethod('upi')">
+          <span class="tab-icon">📱</span>
+          <span>UPI</span>
+        </button>
+        <button class="method-tab" [class.active]="paymentMethod === 'netbanking'" (click)="setMethod('netbanking')">
+          <span class="tab-icon">🏦</span>
+          <span>Net Banking</span>
+        </button>
+      </div>
+
+      <!-- CARD FORM -->
+      <div class="pay-card" *ngIf="paymentMethod === 'card'">
+        <h3 class="form-title">Card Details</h3>
+
+        <!-- Card Preview -->
+        <div class="card-preview">
+          <div class="card-preview-top">
+            <span class="chip">▬▬</span>
+            <span class="card-brand">VISA</span>
+          </div>
+          <div class="card-number-display">
+            {{ f['cardNumber'].value ? (f['cardNumber'].value.match(/.{1,4}/g)?.join(' ') || '•••• •••• •••• ••••') : '•••• •••• •••• ••••' }}
+          </div>
+          <div class="card-preview-bottom">
+            <div>
+              <span class="card-label">Card Holder</span>
+              <span class="card-val">{{ f['cardName'].value || 'YOUR NAME' }}</span>
+            </div>
+            <div>
+              <span class="card-label">Expires</span>
+              <span class="card-val">{{ f['expiry'].value || 'MM/YY' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <form [formGroup]="cardForm">
+          <div class="field full">
+            <label>Cardholder Name</label>
+            <input type="text" formControlName="cardName" placeholder="Name on card"
+              [class.is-invalid]="f['cardName'].invalid && f['cardName'].touched"
+              [class.is-valid]="f['cardName'].valid && f['cardName'].touched" />
+            <span class="err" *ngIf="f['cardName'].touched && f['cardName'].errors?.['required']">Name is required.</span>
+          </div>
+
+          <div class="field full">
+            <label>Card Number</label>
+            <input type="text" placeholder="1234 5678 9012 3456" maxlength="19"
+              (input)="formatCard($event)"
+              [class.is-invalid]="f['cardNumber'].invalid && f['cardNumber'].touched"
+              [class.is-valid]="f['cardNumber'].valid && f['cardNumber'].touched" />
+            <span class="err" *ngIf="f['cardNumber'].touched && f['cardNumber'].errors?.['required']">Card number is required.</span>
+            <span class="err" *ngIf="f['cardNumber'].touched && f['cardNumber'].errors?.['pattern']">Enter a valid 16-digit card number.</span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Expiry Date</label>
+              <input type="text" placeholder="MM/YY" maxlength="5"
+                (input)="formatExpiry($event)"
+                [class.is-invalid]="f['expiry'].invalid && f['expiry'].touched"
+                [class.is-valid]="f['expiry'].valid && f['expiry'].touched" />
+              <span class="err" *ngIf="f['expiry'].touched && f['expiry'].errors?.['required']">Expiry is required.</span>
+              <span class="err" *ngIf="f['expiry'].touched && f['expiry'].errors?.['pattern']">Use MM/YY format.</span>
+            </div>
+            <div class="field">
+              <label>CVV</label>
+              <input type="password" formControlName="cvv" placeholder="•••" maxlength="4"
+                [class.is-invalid]="f['cvv'].invalid && f['cvv'].touched"
+                [class.is-valid]="f['cvv'].valid && f['cvv'].touched" />
+              <span class="err" *ngIf="f['cvv'].touched && f['cvv'].errors?.['required']">CVV is required.</span>
+              <span class="err" *ngIf="f['cvv'].touched && f['cvv'].errors?.['pattern']">Enter 3 or 4 digits.</span>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- UPI FORM -->
+      <div class="pay-card" *ngIf="paymentMethod === 'upi'">
+        <h3 class="form-title">UPI Payment</h3>
+        <div class="upi-apps">
+          <div class="upi-app">
+            <span>🟢</span><span>GPay</span>
+          </div>
+          <div class="upi-app">
+            <span>🟣</span><span>PhonePe</span>
+          </div>
+          <div class="upi-app">
+            <span>🔵</span><span>Paytm</span>
+          </div>
+          <div class="upi-app">
+            <span>🟠</span><span>BHIM</span>
+          </div>
+        </div>
+        <form [formGroup]="upiForm">
+          <div class="field full">
+            <label>UPI ID</label>
+            <input type="text" formControlName="upiId" placeholder="yourname@upi"
+              [class.is-invalid]="u['upiId'].invalid && u['upiId'].touched"
+              [class.is-valid]="u['upiId'].valid && u['upiId'].touched" />
+            <span class="err" *ngIf="u['upiId'].touched && u['upiId'].errors?.['required']">UPI ID is required.</span>
+            <span class="err" *ngIf="u['upiId'].touched && u['upiId'].errors?.['pattern']">Enter a valid UPI ID (e.g. name&#64;upi).</span>
+          </div>
+        </form>
+      </div>
+
+      <!-- NET BANKING -->
+      <div class="pay-card" *ngIf="paymentMethod === 'netbanking'">
+        <h3 class="form-title">Select Your Bank</h3>
+        <div class="bank-grid">
+          <div class="bank-item" *ngFor="let bank of banks"
+            [class.selected]="selectedBank === bank"
+            (click)="selectedBank = bank">
+            <span class="bank-icon">🏦</span>
+            <span>{{ bank }}</span>
+            <span class="bank-check" *ngIf="selectedBank === bank">✓</span>
+          </div>
+        </div>
+        <p class="bank-note" *ngIf="!selectedBank">Please select a bank to continue.</p>
+      </div>
+
+      <!-- PAY BUTTON -->
+      <button class="pay-btn" (click)="pay()" [disabled]="!isFormValid || isProcessing">
+        <span *ngIf="!isProcessing">
+          🔒 Pay {{ currencyService.getCurrencySymbol(booking.category) }}{{ booking.total | number }}
+        </span>
+        <span *ngIf="isProcessing" class="btn-spinner-wrap">
+          <span class="btn-spinner"></span> Processing...
+        </span>
+      </button>
+
+      <p class="pay-note">🔒 Your payment is encrypted and 100% secure. We do not store card details.</p>
+
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="order-summary">
+      <div class="summary-card">
+        <div class="summary-img">
+          <img [src]="booking.image" [alt]="booking.destination" />
+          <div class="summary-img-grad"></div>
+          <span class="summary-dest-badge">
+            {{ booking.category === 'india' || booking.category === 'domestic' ? '🇮🇳 India' : '🌍 International' }}
+          </span>
+        </div>
+
+        <div class="summary-body">
+          <h3>{{ booking.destination }}</h3>
+
+          <div class="summary-chips">
+            <span class="s-chip">👤 {{ booking.name }}</span>
+            <span class="s-chip">📅 {{ booking.date }}</span>
+            <span class="s-chip">👥 {{ booking.people }} {{ booking.people === 1 ? 'Person' : 'People' }}</span>
+            <span class="s-chip">🌙 {{ booking.days }} {{ booking.days === 1 ? 'Night' : 'Nights' }}</span>
+            <span class="s-chip">🏨 {{ booking.roomType }}</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="breakdown">
+            <div class="b-row">
+              <span>Base price / person / night</span>
+              <span>{{ currencyService.getCurrencySymbol(booking.category) }}{{ booking.basePrice | number }}</span>
+            </div>
+            <div class="b-row" *ngIf="booking.roomSurcharge > 0">
+              <span>{{ booking.roomType }} surcharge</span>
+              <span>+ {{ currencyService.getCurrencySymbol(booking.category) }}{{ booking.roomSurcharge | number }}</span>
+            </div>
+            <div class="b-row">
+              <span>{{ booking.people }} × {{ booking.days }} nights</span>
+              <span>{{ currencyService.getCurrencySymbol(booking.category) }}{{ booking.subtotal | number }}</span>
+            </div>
+            <div class="b-row tax">
+              <span>Taxes & fees (5%)</span>
+              <span>+ {{ currencyService.getCurrencySymbol(booking.category) }}{{ booking.taxes | number }}</span>
+            </div>
+          </div>
+
+          <div class="total-row">
+            <span>Total Amount</span>
+            <span class="total-val">
+              {{ currencyService.getCurrencySymbol(booking.category) }}{{ booking.total | number }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust badges -->
+      <div class="trust-row">
+        <div class="trust-item"><span>🔒</span><span>Secure</span></div>
+        <div class="trust-item"><span>✅</span><span>Verified</span></div>
+        <div class="trust-item"><span>💳</span><span>PCI DSS</span></div>
+        <div class="trust-item"><span>🔄</span><span>Refundable</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>

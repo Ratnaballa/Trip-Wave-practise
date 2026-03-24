@@ -134,7 +134,7 @@ export const DESTINATIONS = [
   name: 'Maldives',
   description: 'Luxury island destination with crystal clear waters.',
   image: 'assets/maldives.jpg',
-  category: 'international',
+  category: 'international',  
   rating: 3,
     price: 27000,
     lat: 1.9777,

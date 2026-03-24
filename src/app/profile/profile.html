@@ -1,0 +1,57 @@
+<div class="page-wrapper">
+  <div class="page-hero">
+    <div class="page-hero-overlay">
+      <div class="page-badge">👤 Account</div>
+      <h1>My Profile</h1>
+      <p>Manage your personal information and travel preferences</p>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <div class="profile-card">
+      <div class="avatar-wrap">
+        <div class="avatar">{{ initial }}</div>
+        <div class="avatar-info">
+          <h2>{{ name }}</h2>
+          <span class="member-badge">✈️ TripWave Member</span>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-icon">📧</span>
+          <div>
+            <span class="info-label">Email</span>
+            <span class="info-val">{{ email }}</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <span class="info-icon">🧳</span>
+          <div>
+            <span class="info-label">Total Bookings</span>
+            <span class="info-val">{{ bookingCount }}</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <span class="info-icon">📍</span>
+          <div>
+            <span class="info-label">Location</span>
+            <span class="info-val">India</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <span class="info-icon">🗓️</span>
+          <div>
+            <span class="info-label">Member Since</span>
+            <span class="info-val">{{ memberSince }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button routerLink="/my-bookings" class="btn-primary">View My Bookings</button>
+        <button routerLink="/settings" class="btn-outline">Edit Settings</button>
+      </div>
+    </div>
+  </div>
+</div>
